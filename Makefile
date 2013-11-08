@@ -15,7 +15,10 @@ NPM_ARGS=--registry http://npm-registry.snc1
 SRC = $(shell find src -name '*.coffee' -type f | sort)
 LIB = $(SRC:src/%.coffee=lib/%.js)
 
-build: $(LIB)
+build: $(LIB) node_modules
+
+node_modules :
+	$(MAKE) setup
 
 lib:
 	mkdir lib
