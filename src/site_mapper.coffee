@@ -75,13 +75,13 @@ class Sitemap
     @stream.emit 'end' 
 
   addUrl: (url) ->
-    @stream.emit 'data', urlXml(url)
+    @stream.emit 'data', @urlXml(url)
 
   asIndexXml: ->
-    "<sitemap><loc>#{escapeXmlValue(@location)}</loc><lastmod>#{new Date().toIsoString()}</lastmod></sitemap>"
+    "<sitemap><loc>#{escapeXmlValue(@location)}</loc><lastmod>#{new Date().toISOString()}</lastmod></sitemap>"
 
   urlXml: (url) ->
-    "<url><loc>#{url.url}</loc><lastmod>#{url.updatedAt.toIsoString()}</lastmod><changefreq>#{url.changefreq}</changefreq><priority>#{url.priority}</priority></url>"
+    "<url><loc>#{url.url}</loc><lastmod>#{url.updatedAt.toISOString()}</lastmod><changefreq>#{url.changefreq}</changefreq><priority>#{url.priority}</priority></url>"
 
 {each, reduce} = require 'underscore'
 module.exports = class SiteMapper
@@ -102,7 +102,7 @@ module.exports = class SiteMapper
 
   generateSitemap: ->
     each @sources, (source) =>
-      source.generateUrls @addUrl
+      source.generateUrls (url) => @addUrl(url)
     @createIndex()
 
   createIndex: ->
