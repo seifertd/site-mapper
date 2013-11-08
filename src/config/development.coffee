@@ -1,6 +1,6 @@
 config = require './defaults'
 
-# Override for environment here
+# development specific
 
 
 module.exports = config

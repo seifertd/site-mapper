@@ -1,5 +1,6 @@
 config = require './config'
 util = require 'util'
+async = require 'async'
 
 SITEMAP_INDEX_HEADER = '<?xml version="1.0" encoding="UTF-8"?><sitemapindex xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/siteindex.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'
 
@@ -10,9 +11,10 @@ escapeXmlValue = (str) ->
      .replace(/"/g, '&quot;')
      .replace(/'/g, '&apos;')
 
-{each} = require 'underscore'
+{each, map} = require 'underscore'
 class SitemapGroup
   constructor: (channel) ->
+    console.log "Creating SitemapGroup for channel #{channel}"
     @baseUrl = "#{config.sitemapRootUrl}#{config.sitemapFileDirectory}"
     @directory = config.targetDirectory
     @channel = channel
@@ -27,27 +29,25 @@ class SitemapGroup
     @urlCount += 1
 
   currentSitemap: ->
-    sitemapIndex = @urlCount / @maxUrlsPerFile
+    sitemapIndex = Math.floor(@urlCount / @maxUrlsPerFile)
     fileName = "#{@channel}#{sitemapIndex}.xml.gz"
     sitemap = @sitemaps[sitemapIndex]
     if !sitemap?
-      # Close previous one ...
-      if sitemapIndex > 0
-        previousSitemap = @sitemaps[sitemapIndex-1]
-        previousSitemap.close()
-
       sitemap = @sitemaps[sitemapIndex] = new Sitemap("#{@baseUrl}/#{fileName}", "#{@directory}/#{fileName}")
       sitemap.open()
 
     sitemap
 
-
-  flush: (cb) ->
-    each @sitemaps, (sitemap) ->
-      
+  notifyWhenDone: (allDoneCb) ->
+    process.nextTick =>
+      seriesTasks = []
+      each @sitemaps, (sitemap) ->
+        sitemap.close()
+        seriesTasks.push (cb) -> sitemap.notifyWhenDone(cb)
+      async.series seriesTasks, (err, results) =>
+        allDoneCb(err, results)
 
 fs = require 'fs'
-gzipper = require('zlib').createGzip();
 Stream = require('stream')
 
 SITEMAP_HEADER = '<?xml version="1.0" encoding="UTF-8"?><urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:video="http://www.google.com/schemas/sitemap-video/1.1" xmlns:geo="http://www.google.com/geo/schemas/sitemap/1.0" xmlns:news="http://www.google.com/schemas/sitemap-news/0.9/">'
@@ -56,17 +56,33 @@ class Sitemap
   constructor: (location, fileName) ->
     @location = location
     @fileName = fileName
+    @urlCount = 0
  
   open: ->
+    console.log "!! sitemap open #{@fileName}"
     @file = fs.createWriteStream(@fileName)
     @stream = new Stream()
     @flushed = false
     @closed = false
+    @gzipper = require('zlib').createGzip()
 
-    gzipper.on 'end', ->
-      @flushed = true
-    @stream.pipe(gzipper).pipe(@file)
+    sitemapThis = this
+
+    @gzipper.on 'end', =>
+      sitemapThis.flushed = true
+    @stream.pipe(@gzipper).pipe(@file)
     @stream.emit 'data', SITEMAP_HEADER
+
+  notifyWhenDone: (cb) ->
+    sitemapThis = this
+    process.nextTick =>
+      if sitemapThis.flushed
+        console.log "!! sitemap done #{sitemapThis.fileName}, #{sitemapThis.urlCount} urls"
+        cb(null, true)
+      else
+        sitemapThis.gzipper.on 'end', =>
+          console.log "!! sitemap done #{sitemapThis.fileName}, #{sitemapThis.urlCount} urls"
+          cb(null, true)
 
   close: ->
     return if @closed
@@ -75,6 +91,7 @@ class Sitemap
     @stream.emit 'end' 
 
   addUrl: (url) ->
+    @urlCount += 1
     @stream.emit 'data', @urlXml(url)
 
   asIndexXml: ->
@@ -101,11 +118,30 @@ module.exports = class SiteMapper
     @sources.push source
 
   generateSitemap: ->
-    each @sources, (source) =>
-      source.generateUrls (url) => @addUrl(url)
-    @createIndex()
+    console.log "Generating sitemaps for #{@sources.length} sources ..."
+    addUrlCb = (url) =>
+      @addUrl(url)
+    seriesTasks = []
+    seriesTasks.push (stCb) =>
+      parallelTasks = map @sources, (source) ->
+        (cb) ->
+          source.generateUrls addUrlCb
+          source.on 'done', (result) ->
+            cb(null, result)
+      async.parallel parallelTasks, (err, results) ->
+        stCb(err, results)
+    seriesTasks.push (stCb) =>
+      console.log "Waiting for sitemap groups ..."
+      parallelTasks = map @sitemapGroups, (group, channel) =>
+        (cb) ->
+          group.notifyWhenDone cb
+      async.parallel parallelTasks, (err, results) ->
+        stCb(err, results)
+    async.series seriesTasks, (err, results) =>
+      @createIndex()
 
   createIndex: ->
+    console.log "Creating sitemap index..."
     index = fs.createWriteStream("#{config.targetDirectory}/#{config.sitemapIndex}")
     index.write(SITEMAP_INDEX_HEADER)
     each @sitemapGroups, (group, channel) ->
@@ -119,5 +155,7 @@ module.exports = class SiteMapper
     sitemapGroup.addUrl url
 
   sitemapGroupForChannel: (channel) ->
-    @sitemapGroups[channel] ||= new SitemapGroup(channel)
-
+    group = @sitemapGroups[channel]
+    unless group?
+      group = @sitemapGroups[channel] = new SitemapGroup(channel)
+    group

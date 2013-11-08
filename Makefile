@@ -37,7 +37,7 @@ setup :
 	@npm $(NPM_ARGS) install
 
 generate : build
-	@NODE_PATH=lib NODE_ENV=test node ./lib/generate
+	@NODE_PATH=lib NODE_ENV=development node ./lib/generate
 
 test : build
 	@echo TESTS = $(TESTS)
