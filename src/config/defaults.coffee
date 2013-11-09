@@ -12,6 +12,20 @@ config.defaultUrlFormatter = (href) ->
   else
     "#{config.urlBase}/#{href}"
 
+config.deals =
+  sitemapOptions:
+    changefreq: 'daily'
+    priority: 1
+  serviceUrl: "http://seo-api2-staging.snc1/seoapi/v1/deals/sitemap.txt"
+  channelForUrl: (url) ->
+    switch url.channel
+      when 'goods', 'getaways'
+        "#{url.channel}-deals"
+      else
+        'local-deals'
+  bodyProcessor: (body) ->
+    JSON.parse(body).deals
+
 config.localPages =
   sitemapOptions:
     changefreq: 'daily'

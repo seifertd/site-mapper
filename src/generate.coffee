@@ -5,4 +5,5 @@ ConfigSource = require 'site_mapper/config_source'
 sitemapper = new SiteMapper
 sitemapper.addSource new ConfigSource("homeUrls")
 sitemapper.addSource new HttpSource("localPages")
+sitemapper.addSource new HttpSource("deals")
 sitemapper.generateSitemap()
