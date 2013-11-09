@@ -5,10 +5,26 @@ config.sitemapIndex = "sitemap.xml"
 config.sitemapRootUrl = "http://www.groupon.com"
 config.sitemapFileDirectory = "/sitemaps"
 config.maxUrlsPerFile = 50000
+config.urlBase = "http://www.groupon.com"
+config.defaultUrlFormatter = (href) ->
+  if href && href.length && href[0] == '/'
+    "#{config.urlBase}#{href}"
+  else
+    "#{config.urlBase}/#{href}"
+
+config.localPages =
+  sitemapOptions:
+    changefreq: 'daily'
+    priority: 1
+  serviceUrl: "http://seo-services-vip.snc1/seodeals/pages.txt?indexed=true"
 
 config.homeUrls =
   channel: 'home'
+  sitemapOptions:
+    changefreq: 'weekly'
+    priority: 0.1
   urls: [
+   '/',
    '/about',
    '/affiliate_widget',
    '/chamber-of-commerce-terms',

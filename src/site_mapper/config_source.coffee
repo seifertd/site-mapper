@@ -1,22 +1,22 @@
 Source = require './source'
 config = require '../config'
 
-{each} = require 'underscore'
+{each, extend} = require 'underscore'
 
 module.exports = class ConfigSource extends Source
-  constructor: (configKey, options) ->
-    Source.call(this, options)
+  constructor: (configKey, options = {}) ->
     @configKey = configKey
+    @sourceConfig= config[configKey]
+    @sitemapOptions = extend {}, @sourceConfig.sitemapOptions || {}, options
+    Source.call(this, @sitemapOptions)
 
   _generateUrls: (cb) ->
-    util = require 'util'
-    console.log "Generating sitemap urls from config key #{@configKey}, this = #{util.inspect this}"
-    urls = config[@configKey]
+    urls = @sourceConfig
     channel = urls.channel
     updatedAt = new Date()
     each urls.urls, (href) =>
       cb {
-        url: href
+        url: @urlFormatter(href)
         channel: channel
         updatedAt: updatedAt
         changefreq: @changefreq

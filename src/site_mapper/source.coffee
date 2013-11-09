@@ -1,11 +1,11 @@
 EventEmitter = require('events').EventEmitter
+config = require '../config'
 
 module.exports = class Source extends EventEmitter
   constructor: (options) ->
-    util = require 'util'
-    console.log "!! new Source, options: #{util.inspect options}"
     @changefreq = options.changefreq
     @priority = options.priority
+    @urlFormatter = options.urlFormatter || config.defaultUrlFormatter
 
   generateUrls: (cb) ->
     @_generateUrls cb 
@@ -13,6 +13,10 @@ module.exports = class Source extends EventEmitter
   end: ->
     process.nextTick =>
       @emit('done')
+
+  error: (err) ->
+    process.nextTick =>
+      @emit('error', err)
 
   _generateUrls: (cb) ->
     throw "Not Implemented Yet!"

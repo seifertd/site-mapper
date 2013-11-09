@@ -34,7 +34,6 @@ class SitemapGroup
     sitemap = @sitemaps[sitemapIndex]
     if !sitemap?
       sitemap = @sitemaps[sitemapIndex] = new Sitemap("#{@baseUrl}/#{fileName}", "#{@directory}/#{fileName}")
-      sitemap.open()
 
     sitemap
 
@@ -91,6 +90,7 @@ class Sitemap
     @stream.emit 'end' 
 
   addUrl: (url) ->
+    @open() if @urlCount == 0
     @urlCount += 1
     @stream.emit 'data', @urlXml(url)
 
@@ -125,9 +125,11 @@ module.exports = class SiteMapper
     seriesTasks.push (stCb) =>
       parallelTasks = map @sources, (source) ->
         (cb) ->
-          source.generateUrls addUrlCb
           source.on 'done', (result) ->
             cb(null, result)
+          source.on 'error', (error) ->
+            cb(error, null)
+          source.generateUrls addUrlCb
       async.parallel parallelTasks, (err, results) ->
         stCb(err, results)
     seriesTasks.push (stCb) =>
@@ -138,7 +140,10 @@ module.exports = class SiteMapper
       async.parallel parallelTasks, (err, results) ->
         stCb(err, results)
     async.series seriesTasks, (err, results) =>
-      @createIndex()
+      if err?
+        console.log "ERROR! generating sitemaps: #{err}"
+      else
+        @createIndex()
 
   createIndex: ->
     console.log "Creating sitemap index..."

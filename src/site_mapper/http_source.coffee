@@ -1,29 +1,36 @@
-Source = require('./source')
+ConfigSource = require('./config_source')
 request = require('request')
 {each} = require 'underscore'
+util = require 'util'
 
-channelForHref = (href) ->
-  href.split('/')[0]
+defaultChannelForUrl = (url) ->
+  url.split('/')[0]
 
-module.exports = class HttpSource extends Source
-  constructor: (url, options) ->
-    Source.call(this, options)
-    @url = url
-    @channelForHref = options.channelForHref || channelForHref
-    @urlFormatter = options.urlFormatter || ( (href) -> href )
+defaultBodyProcessor = (body) ->
+  body.split("\n")
+
+module.exports = class HttpSource extends ConfigSource
+  constructor: (configKey, options = {}) ->
+    ConfigSource.call(this, configKey, options)
+    @url = @sourceConfig.serviceUrl
+    @channelForUrl = options.channelForUrl || defaultChannelForUrl
+    @bodyProcessor = options.bodyProcessor || defaultBodyProcessor
 
   _generateUrls: (cb) ->
     console.log "Generating sitemap urls from service url #{@url}"
     updatedAt = new Date()
     request @url, (error, response, body) =>
-      urls = body.split("\n")
-      console.log "Read #{body.length} bytes from #{@url}, #{urls.length} urls, first: #{urls[0]}"
-      each urls, (href) =>
-        cb {
-          url: @urlFormatter(href)
-          channel: @channelForHref(href)
-          updatedAt: updatedAt
-          changefreq: @changefreq
-          priority: @priority
-        }
-      @end()
+      if error
+        @error(error)
+      else
+        urls = @bodyProcessor(body)
+        console.log "Read #{body.length} bytes from #{@url}, #{urls.length} urls, first: #{util.inspect urls[0]}"
+        each urls, (url) =>
+          cb {
+            url: @urlFormatter(url)
+            channel: @channelForUrl(url)
+            updatedAt: updatedAt
+            changefreq: @changefreq
+            priority: @priority
+          }
+        @end()
