@@ -1,6 +1,6 @@
 module.exports = config = {}
 config.env = process.env.NODE_ENV || 'development'
-config.targetDirectory = "./tmp/sitemaps/#{config.env}"
+config.targetDirectory = "#{process.cwd()}/tmp/sitemaps/#{config.env}"
 config.sitemapIndex = "sitemap.xml"
 config.sitemapRootUrl = "http://www.groupon.com"
 config.sitemapFileDirectory = "/sitemaps"
@@ -10,7 +10,10 @@ config.defaultUrlFormatter = (href) ->
   if href && href.length && href[0] == '/'
     "#{config.urlBase}#{href}"
   else
-    "#{config.urlBase}/#{href}"
+    if href.length
+      "#{config.urlBase}/#{href}"
+    else
+      config.urlBase
 
 config.deals =
   sitemapOptions:

@@ -7,9 +7,9 @@ usage :
 	@echo 'make test                        : Run the tests'
 	@echo ''
 
-COFFEE=node_modules/.bin/coffee
-MOCHA=node_modules/.bin/mocha
-TESTS:=test/**/*.coffee
+COFFEE=./node_modules/.bin/coffee
+MOCHA=../node_modules/.bin/mocha
+TESTS:=../test/**/*.coffee
 TEST_REPORTER=tap
 NPM_ARGS=--registry http://npm-registry.snc1
 SRC = $(shell find src -name '*.coffee' -type f | sort)
@@ -41,4 +41,4 @@ generate : build
 
 test : build
 	@echo TESTS = $(TESTS)
-	@NODE_PATH=lib NODE_ENV=test $(MOCHA) --recursive --compilers coffee:coffee-script-redux/register $(TESTS) --reporter $(TEST_REPORTER)
+	@cd test; NODE_PATH=../lib NODE_ENV=test $(MOCHA) --recursive --compilers coffee:coffee-script-redux/register $(TESTS) --reporter $(TEST_REPORTER)

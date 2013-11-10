@@ -1,5 +1,4 @@
 expect = require('chai').expect
-bond = require 'bondjs'
 util = require 'util'
 Source = require 'site_mapper/source'
 
