@@ -12,6 +12,9 @@ describe 'config', ->
     expect(config.targetDirectory).to.equal "#{process.cwd()}/tmp/sitemaps/test"
 
   describe 'app specific', ->
+    before ->
+      config.addAppSpecific()
+
     it 'can be found', ->
       expect(config.foo).to.equal 'bar'
 

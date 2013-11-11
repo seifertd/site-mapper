@@ -1,17 +1,27 @@
+cfr = require 'coffee-script-redux/register'
 fs = require 'fs'
 path = require 'path'
 {extend} = require 'underscore'
 
 env = process.env.NODE_ENV || 'development'
-module.exports = config = require "./#{env}"
+config = {}
+try
+  config = require "./#{env}"
+catch err
+  # Load defaults
+  config = require "./defaults"
+
 config.env = env
 
-# Overlay cwd config
-appConfigPath = path.join(process.cwd(), 'config', env)
+config.addAppSpecific = ->
+  # Overlay cwd config
+  appConfigPath = path.join(process.cwd(), 'config', env)
+  try
+    appConfig = require appConfigPath
+  catch err
+    console.log "WARN: Could not require app specific config #{appConfigPath}: #{err}"
 
-try
-  appConfig = require appConfigPath
   if appConfig?
     extend config, appConfig
-catch err
-  console.log "!WARN: Could not require app specific configuration #{appConfigPath}: #{err}"
+
+module.exports = config

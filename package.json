@@ -11,7 +11,8 @@
   "keywords": [
     "sitemap"
   ],
-  "main": "./lib/site_mapper",
+  "main": "./lib/generator",
+  "bin": "./bin/sitemapper",
   "repository": {
     "type": "git",
     "url": "https://github.com/seifertd/site-mapper"

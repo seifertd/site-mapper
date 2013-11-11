@@ -105,10 +105,13 @@ module.exports = class SiteMapper
   constructor: ->
     @targetDirectory = config.targetDirectory
     buildDir = (parentPath, nextPath) ->
-      fullPath = if parentPath.length > 0 then "#{parentPath}/#{nextPath}" else nextPath
-      if fullPath != "."
+      fullPath = if parentPath.length > 0 && parentPath != "/" then "#{parentPath}/#{nextPath}" else "#{parentPath}#{nextPath}"
+      if fullPath != "." && fullPath != ""
         fs.mkdirSync(fullPath) unless fs.existsSync(fullPath)
+      else if fullPath == ""
+        fullPath = "/"
       fullPath
+
     reduce @targetDirectory.split('/'), buildDir, ''
     @sitemapIndex = config.sitemapIndex
     @sources = []

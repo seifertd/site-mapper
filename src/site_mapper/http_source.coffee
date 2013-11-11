@@ -1,4 +1,4 @@
-Source = require('./config_source')
+Source = require('./source')
 request = require('request')
 {each} = require 'underscore'
 util = require 'util'
