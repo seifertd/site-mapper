@@ -12,7 +12,6 @@ MOCHA=../node_modules/.bin/mocha
 TESTS:=../test/**/*.coffee
 TEST_REPORTER=tap
 NPM_ARGS=
-VERSION=
 SRC = $(shell find src -name '*.coffee' -type f | sort)
 LIB = $(SRC:src/%.coffee=lib/%.js)
 
@@ -41,16 +40,17 @@ setup :
 generate : build
 	@NODE_PATH=lib NODE_ENV=development node ./lib/generate
 
-check-version :
-	ifndef VERSION
-	  $(error VERSION is undefined)
-	endif
+check-version:
+ifndef VERSION
+	$(error VERSION is undefined)
+endif
 
 release : test check-version
 	@mkdir -p build
+	@ln -sf $(PWD) build/site-mapper
 	@echo "Creating release $(VERSION)"
-	@tar czf build/site-mapper-$(VERSION).tgz CHANGELOG.md LICENSE Makefile README.md bin lib package.json src test
-	@npm publish build/site-mapper-$(VERSION).tgz
+	@tar czf build/site-mapper_$(VERSION).tar.gz -C build site-mapper/CHANGELOG.md site-mapper/LICENSE site-mapper/Makefile site-mapper/README.md site-mapper/bin site-mapper/lib site-mapper/package.json site-mapper/src site-mapper/test
+	@cd build; npm publish site-mapper_$(VERSION).tar.gz
 
 test : node_modules build
 	@echo TESTS = $(TESTS)
