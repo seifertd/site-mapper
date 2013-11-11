@@ -11,7 +11,8 @@ COFFEE=./node_modules/.bin/coffee
 MOCHA=../node_modules/.bin/mocha
 TESTS:=../test/**/*.coffee
 TEST_REPORTER=tap
-NPM_ARGS=--registry http://npm-registry.snc1
+NPM_ARGS=
+VERSION=
 SRC = $(shell find src -name '*.coffee' -type f | sort)
 LIB = $(SRC:src/%.coffee=lib/%.js)
 
@@ -39,6 +40,17 @@ setup :
 generate : build
 	@NODE_PATH=lib NODE_ENV=development node ./lib/generate
 
-test : build
+check-version:
+ifndef VERSION
+  $(error VERSION is undefined)
+endif
+
+release : test check-version
+	@mkdir -p build
+	@echo "Creating release $(VERSION)"
+	@tar czf build/site-mapper-$(VERSION).tgz CHANGELOG.md LICENSE Makefile README.md bin lib node_modules package.json src test
+	@npm publish build/site-mapper-$(VERSION).tgz
+
+test : node_modules build
 	@echo TESTS = $(TESTS)
 	@cd test; NODE_PATH=../lib NODE_ENV=test $(MOCHA) --recursive --compilers coffee:coffee-script-redux/register $(TESTS) --reporter $(TEST_REPORTER)
