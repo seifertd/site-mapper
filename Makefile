@@ -31,6 +31,7 @@ lib/%.js: src/%.coffee lib
 clean:
 	rm -rf lib
 	rm -rf node_modules
+	rm -rf build
 
 setup :
 	@rm -rf node_modules
@@ -40,15 +41,15 @@ setup :
 generate : build
 	@NODE_PATH=lib NODE_ENV=development node ./lib/generate
 
-check-version:
-ifndef VERSION
-  $(error VERSION is undefined)
-endif
+check-version :
+	ifndef VERSION
+	  $(error VERSION is undefined)
+	endif
 
 release : test check-version
 	@mkdir -p build
 	@echo "Creating release $(VERSION)"
-	@tar czf build/site-mapper-$(VERSION).tgz CHANGELOG.md LICENSE Makefile README.md bin lib node_modules package.json src test
+	@tar czf build/site-mapper-$(VERSION).tgz CHANGELOG.md LICENSE Makefile README.md bin lib package.json src test
 	@npm publish build/site-mapper-$(VERSION).tgz
 
 test : node_modules build
