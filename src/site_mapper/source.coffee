@@ -3,6 +3,7 @@ config = require '../config'
 
 module.exports = class Source extends EventEmitter
   constructor: (options) ->
+    @options = options
     @changefreq = options.changefreq
     @priority = options.priority
     @urlFormatter = options.urlFormatter || config.defaultUrlFormatter

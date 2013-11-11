@@ -3,18 +3,14 @@ config = require '../config'
 
 {each, extend} = require 'underscore'
 
-module.exports = class ConfigSource extends Source
-  constructor: (configKey, options = {}) ->
-    @configKey = configKey
-    @sourceConfig= config[configKey]
-    @sitemapOptions = extend {}, @sourceConfig.sitemapOptions || {}, options
-    Source.call(this, @sitemapOptions)
+module.exports = class StaticSetSource extends Source
+  constructor: (options) ->
+    Source.call(this, options)
 
   _generateUrls: (cb) ->
-    urls = @sourceConfig
-    channel = urls.channel
+    channel = @options.channel
     updatedAt = new Date()
-    each urls.urls, (href) =>
+    each @options.urls, (href) =>
       cb {
         url: @urlFormatter(href)
         channel: channel

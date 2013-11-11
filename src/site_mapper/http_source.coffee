@@ -1,4 +1,4 @@
-ConfigSource = require('./config_source')
+Source = require('./config_source')
 request = require('request')
 {each} = require 'underscore'
 util = require 'util'
@@ -9,12 +9,12 @@ defaultChannelForUrl = (url) ->
 defaultBodyProcessor = (body) ->
   body.split("\n")
 
-module.exports = class HttpSource extends ConfigSource
-  constructor: (configKey, options = {}) ->
-    ConfigSource.call(this, configKey, options)
-    @url = @sourceConfig.serviceUrl
-    @channelForUrl = @sourceConfig.channelForUrl || defaultChannelForUrl
-    @bodyProcessor = @sourceConfig.bodyProcessor || defaultBodyProcessor
+module.exports = class HttpSource extends Source
+  constructor: (options) ->
+    Source.call(this, options)
+    @url = @options.serviceUrl
+    @channelForUrl = @options.channelForUrl || defaultChannelForUrl
+    @bodyProcessor = @options.bodyProcessor || defaultBodyProcessor
 
   _generateUrls: (cb) ->
     console.log "Generating sitemap urls from service url #{@url}"
