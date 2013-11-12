@@ -12,7 +12,7 @@ class TestSource extends Source
       changefreq: @changefreq
     }
     @emit('done')
-  
+
 describe 'url sources', ->
   @url = null
   it 'produce urls', (done) ->
