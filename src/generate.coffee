@@ -1,2 +1,2 @@
-sitemapGenerator = require 'generator'
-sitemapGenerator()
+{generateSitemaps} = require 'generator'
+generateSitemaps()

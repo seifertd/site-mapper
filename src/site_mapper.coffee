@@ -3,7 +3,6 @@ util = require 'util'
 async = require 'async'
 fs = require 'fs'
 SitemapGroup = require './sitemap_group'
-Sitemap = require './sitemap'
 
 {each, map, reduce} = require 'underscore'
 
