@@ -13,6 +13,7 @@ module.exports = class HttpSource extends Source
   constructor: (options) ->
     Source.call(this, options)
     @url = @options.serviceUrl
+    @defaultChannel = @options.channel
     @channelForUrl = @options.channelForUrl || defaultChannelForUrl
     @bodyProcessor = @options.bodyProcessor || defaultBodyProcessor
 
@@ -28,8 +29,8 @@ module.exports = class HttpSource extends Source
         each urls, (url) =>
           cb {
             url: @urlFormatter(url)
-            channel: @channelForUrl(url)
-            updatedAt: updatedAt
+            channel: @defaultChannel || @channelForUrl(url)
+            updatedAt: url.updatedAt || updatedAt
             changefreq: @changefreq
             priority: @priority
           }

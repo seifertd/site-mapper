@@ -9,8 +9,12 @@ config.sitemapHeader = '<?xml version="1.0" encoding="UTF-8"?><urlset xmlns:xsi=
 config.maxUrlsPerFile = 50000
 config.urlBase = "http://www.groupon.com"
 config.defaultUrlFormatter = (href) ->
-  if href && href.length && href[0] == '/'
+  if '/' == href
+    config.urlBase
+  else if href && href.length && href[0] == '/'
     "#{config.urlBase}#{href}"
+  else if href && href.length && href.match(/^https?:\/\//)
+    href
   else
     if href.length
       "#{config.urlBase}/#{href}"

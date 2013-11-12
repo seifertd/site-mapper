@@ -17,7 +17,7 @@ config.addAppSpecific = ->
   # Overlay cwd config
   appConfigPath = path.join(process.cwd(), 'config', env)
   try
-    appConfig = require appConfigPath
+    appConfig = require(appConfigPath)
   catch err
     console.log "WARN: Could not require app specific config #{appConfigPath}: #{err}"
 

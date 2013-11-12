@@ -10,7 +10,10 @@ escapeXmlValue = (str) ->
      .replace(/'/g, '&apos;')
 
 urlXml = (url) ->
-  "<url><loc>#{url.url}</loc><lastmod>#{url.updatedAt.toISOString()}</lastmod><changefreq>#{url.changefreq}</changefreq><priority>#{url.priority}</priority></url>"
+  xml = "<url><loc>#{url.url}</loc><lastmod>#{url.updatedAt.toISOString()}</lastmod><changefreq>#{url.changefreq}</changefreq><priority>#{url.priority}</priority>"
+  if url.image?
+    xml = xml + "<image:image><image:loc>#{url.image}</image:loc></image:image>"
+  xml + "</url>"
 
 module.exports = class Sitemap
   constructor: (location, fileName) ->
@@ -53,7 +56,11 @@ module.exports = class Sitemap
   addUrl: (url) ->
     @open() if @urlCount == 0
     @urlCount += 1
-    @stream.emit 'data', urlXml(url)
+    try
+      @stream.emit 'data', urlXml(url)
+    catch ex
+      util = require 'util'
+      console.log "!!ERROR: Could not convert url: #{util.inspect url} to xml"
 
   asIndexXml: ->
     "<sitemap><loc>#{escapeXmlValue(@location)}</loc><lastmod>#{new Date().toISOString()}</lastmod></sitemap>"
