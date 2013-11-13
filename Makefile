@@ -50,7 +50,7 @@ release : test check-version
 	@rm -rf build/site-mapper; ln -sf $(PWD) build/site-mapper
 	@echo "Creating release $(VERSION)"
 	@tar czf build/site-mapper_$(VERSION).tar.gz -C build site-mapper/CHANGELOG.md site-mapper/LICENSE site-mapper/Makefile site-mapper/README.md site-mapper/bin site-mapper/lib site-mapper/package.json site-mapper/src site-mapper/test
-	@cd build; npm publish site-mapper_$(VERSION).tar.gz
+	@cd build; npm $(NPM_ARGS) publish site-mapper_$(VERSION).tar.gz
 
 test : node_modules build
 	@echo TESTS = $(TESTS)

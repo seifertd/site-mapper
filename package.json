@@ -20,6 +20,9 @@
   "scripts": {
     "test": "make test"
   },
+  "publishConfig": {
+    "username": "doug"
+  },
   "dependencies": {
     "coffee-script-redux": "2.0.0-beta7",
     "underscore": "1.5.x",
