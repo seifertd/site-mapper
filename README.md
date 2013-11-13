@@ -142,10 +142,14 @@ module.exports = appConfig
 Finally, putting it all together, you can generate the sitemaps as follows:
 
   1. Install all the dependencies:
+         ```sh
          rm -rf node_modules
          npm install
+         ```
   1. Run the generator:
+         ```sh 
          NODE_ENV=staging ./node_modules/.bin/site-mapper
+         ```
 
 Below is a make file that encapsulates the above recipe.  It can be run
 by running:
