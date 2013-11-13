@@ -21,4 +21,4 @@ generateSitemaps = ->
 
   sitemapper.generateSitemap()
 
-module.exports = {generateSitemaps, HttpSource, StaticSetSource, SiteMapper, CsvFileSource}
+module.exports = {generateSitemaps, HttpSource, StaticSetSource, SiteMapper, CsvFileSource, config}
