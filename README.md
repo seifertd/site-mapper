@@ -26,12 +26,12 @@ configuration files, but that is not the intent.
 The site-mapper module views the sitemap generation process as follows:
 
 
-  +--------+          +------------+        +--------------+       +---------+
-  | Source |          | SiteMapper |        | SitemapGroup |       | Sitemap |
-  |--------|produces  |------------|  adds  |--------------| adds  |---------|
-  |        +--------->|            |------->|              |------>|         |
-  |        |  urls    |            |  urls  |              | urls  |         |
-  +--------+          +------------+        +--------------+       +---------+
+    +--------+          +------------+        +--------------+       +---------+
+    | Source |          | SiteMapper |        | SitemapGroup |       | Sitemap |
+    |--------|produces  |------------|  adds  |--------------| adds  |---------|
+    |        +--------->|            |------->|              |------>|         |
+    |        |  urls    |            |  urls  |              | urls  |         |
+    +--------+          +------------+        +--------------+       +---------+
 
 ### Sources ###
 
