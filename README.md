@@ -50,10 +50,7 @@ Create a package.json file similar to the following:
     "node": "*"
   }
 }
-
 ```
-    ,"coffee-script-redux": ">0"
-    ,"async": ">0"
 
 ### Configuration ###
 
@@ -77,6 +74,67 @@ the coffee script module as a dependency:
     ,"coffee-script-redux": ">0"
   }
 }
+```
+
+The configuration file can contain any of the following keys.  The
+values below are defaults that will be used unless overridden in your
+configuration file.
+
+```coffee
+config = {}
+config.sources = {}
+config.targetDirectory = "#{process.cwd()}/tmp/sitemaps/#{config.env}"
+config.sitemapIndex = "sitemap.xml"
+config.sitemapRootUrl = "http://www.mysite.com"
+config.sitemapFileDirectory = "/sitemaps"
+config.sitemapIndexHeader = '<?xml version="1.0" encoding="UTF-8"?><sitemapindex xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/siteindex.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'
+config.sitemapHeader = '<?xml version="1.0" encoding="UTF-8"?><urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:video="http://www.google.com/schemas/sitemap-video/1.1" xmlns:geo="http://www.google.com/geo/schemas/sitemap/1.0" xmlns:news="http://www.google.com/schemas/sitemap-news/0.9/">'
+config.maxUrlsPerFile = 50000
+config.urlBase = "http://www.mysite.com"
+config.defaultUrlFormatter = (href) ->
+  if '/' == href
+    config.urlBase
+  else if href && href.length && href[0] == '/'
+    "#{config.urlBase}#{href}"
+  else if href && href.length && href.match(/^https?:\/\//)
+    href
+  else
+    if href.length
+      "#{config.urlBase}/#{href}"
+    else
+      config.urlBase
+
+module.exports = config
+```
+
+The sources object contains arbitrarily named keys pointing at objects with the
+following keys: type, options.  The type is either one of the built in Source
+types (see below) or a site specific class derived from the Source base class.
+See the test suite for examples of creating Source subclasses.
+
+A minimal config might be:
+
+```coffee
+{StaticSetSource} = require 'site-mapper'
+appConfig =
+  sitemapRootUrl: "http://staging.mysite.com"
+  urlBase: "http://staging.mysite.com"
+  sitemapIndex: "sitemap_index.xml"
+  sources:
+    staticUrls:
+      type: StaticSetSource
+      options:
+        channel: 'static'
+        changefreq: 'weekly'
+        priority: 1
+        urls: [
+          '/',
+          '/about',
+          '/faq',
+          '/jobs
+        ]
+
+module.exports = appConfig
 ```
 
 ## Sitemap Generation ##
