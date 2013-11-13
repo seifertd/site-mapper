@@ -1,3 +1,7 @@
+0.0.7 / 2013-11-13
+------------------
+* Handle sitemap image urls in HTTP source
+
 0.0.6 / 2013-11-13
 ------------------
 * Fix missing fixture
