@@ -139,14 +139,14 @@ appConfig =
         changefreq: 'weekly'
         priority: 0.8
         serviceUrl: "http://api.mysite.com/widgets"
-      channelForUrl: (url) ->
-        url.category
-      bodyProcessor: (body) ->
-        urls = JSON.parse(body)
-        map urls, (url) ->
-          {permalink: url.permalink, updatedAt: url.updated_at, category: url.category}
-      urlFormatter: (url) ->
-        "http://www.mysite.com/widgets/#{url.category}/#{url.permalink}"
+        channelForUrl: (url) ->
+          url.category
+        bodyProcessor: (body) ->
+          urls = JSON.parse(body)
+          map urls, (url) ->
+            {permalink: url.permalink, updatedAt: url.updated_at, category: url.category}
+        urlFormatter: (url) ->
+          "http://www.mysite.com/widgets/#{url.category}/#{url.permalink}"
 
 module.exports = appConfig
 ```
