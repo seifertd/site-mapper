@@ -33,5 +33,6 @@ module.exports = class HttpSource extends Source
             updatedAt: url.updatedAt || updatedAt
             changefreq: @changefreq
             priority: @priority
+            image: url.image
           }
         @end()

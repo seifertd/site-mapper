@@ -26,7 +26,7 @@ module.exports = class SiteMapper
     @sources.push source
 
   generateSitemap: ->
-    console.log "Generating sitemaps for #{@sources.length} sources ..."
+    console.log "Generating sitemaps for #{@sources.length} sources, environment = #{config.env} ..."
     addUrlCb = (url) =>
       @addUrl(url)
     seriesTasks = []

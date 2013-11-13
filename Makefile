@@ -2,9 +2,9 @@ usage :
 	@echo ''
 	@echo 'Core tasks                       : Description'
 	@echo '--------------------             : -----------'
-	@echo 'make generate                    : Generate the sitemaps'
-	@echo 'make upload                      : Upload sitemaps to S3'
+	@echo 'make generate                    : Generate the sitemaps in development environment'
 	@echo 'make test                        : Run the tests'
+	@echo 'make release VERSION=x.x.x       : Release a new version of the npm module'
 	@echo ''
 
 COFFEE=./node_modules/.bin/coffee
