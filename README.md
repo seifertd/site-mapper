@@ -115,7 +115,7 @@ See the test suite for examples of creating Source subclasses.
 A minimal config might be:
 
 ```coffee
-{StaticSetSource} = require 'site-mapper'
+{StaticSetSource, HttpSource} = require 'site-mapper'
 appConfig =
   sitemapRootUrl: "http://staging.mysite.com"
   urlBase: "http://staging.mysite.com"
@@ -133,6 +133,20 @@ appConfig =
           '/faq',
           '/jobs'
         ]
+    serviceUrls:
+      type: HttpSource
+      options:
+        changefreq: 'weekly'
+        priority: 0.8
+        serviceUrl: "http://api.mysite.com/widgets"
+      channelForUrl: (url) ->
+        url.category
+      bodyProcessor: (body) ->
+        urls = JSON.parse(body)
+        map urls, (url) ->
+          {permalink: url.permalink, updatedAt: url.updated_at, category: url.category}
+      urlFormatter: (url) ->
+        "http://www.mysite.com/widgets/#{url.category}/#{url.permalink}"
 
 module.exports = appConfig
 ```
@@ -214,6 +228,7 @@ segment as the channel.  Thus, the url
     /stuff/path/to/stuff.html
 
 would be assigned to the 'stuff' channel and would be put in sitemaps named
+stuff0.xml.gz, stuff1.xml.gz, etc.
 
 ### Sitemap Groups ###
 
