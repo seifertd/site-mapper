@@ -131,10 +131,49 @@ appConfig =
           '/',
           '/about',
           '/faq',
-          '/jobs
+          '/jobs'
         ]
 
 module.exports = appConfig
+```
+
+### Running the Code ###
+
+Finally, putting it all together, you can generate the sitemaps as follows:
+
+  1. Install all the dependencies:
+         rm -rf node_modules
+         npm install
+  1. Run the generator:
+         NODE_ENV=staging ./node_modules/.bin/site-mapper
+
+Below is a make file that encapsulates the above recipe.  It can be run
+by running:
+
+    make setup generate
+
+```make
+usage :
+	@echo ''
+	@echo 'Core tasks                       : Description'
+	@echo '--------------------             : -----------'
+	@echo 'make setup                       : Install dependencies'
+	@echo 'make generate                    : Generate the sitemaps'
+	@echo ''
+
+COFFEE=./node_modules/.bin/coffee
+SITEMAPPER=./node_modules/.bin/site-mapper
+NPM_ARGS=
+NODE_ENV=staging
+
+setup :
+	@rm -rf node_modules
+	@echo npm $(NPM_ARGS) install
+	@npm $(NPM_ARGS) install
+
+generate :
+	@rm -rf tmp
+	@NODE_ENV=$(NODE_ENV) $(SITEMAPPER)
 ```
 
 ## Sitemap Generation ##
