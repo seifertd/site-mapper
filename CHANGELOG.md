@@ -1,3 +1,7 @@
+0.0.8 / 2013-11-15
+------------------
+* Documentation update
+
 0.0.7 / 2013-11-13
 ------------------
 * Handle sitemap image urls in HTTP source
