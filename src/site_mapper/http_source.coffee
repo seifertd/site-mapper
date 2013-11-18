@@ -23,9 +23,14 @@ module.exports = class HttpSource extends Source
     request @url, (error, response, body) =>
       if error
         @error(error)
+      else if response.statusCode != 200
+        @error
+          message: "HTTP request got non-200 response"
+          statusCode: response.statusCode
+          url: @url
       else
         urls = @bodyProcessor(body)
-        console.log "Read #{body.length} bytes from #{@url}, #{urls.length} urls, first: #{util.inspect urls[0]}"
+        console.log "Read #{body.length} bytes from #{@url}, #{urls.length} urls, first: #{util.inspect urls[0]}, status: #{response.statusCode}"
         each urls, (url) =>
           cb {
             url: @urlFormatter(url)

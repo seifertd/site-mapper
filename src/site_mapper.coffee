@@ -49,7 +49,7 @@ module.exports = class SiteMapper
         stCb(err, results)
     async.series seriesTasks, (err, results) =>
       if err?
-        console.log "ERROR! generating sitemaps: #{err}"
+        console.log "\n\nERROR! generating sitemaps: #{util.inspect err}\n\n"
       else
         @createIndex()
 
