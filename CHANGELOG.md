@@ -1,3 +1,7 @@
+0.0.9 / 2013-11-18
+------------------
+* Shore up CSV and HTTP source error handling
+
 0.0.8 / 2013-11-15
 ------------------
 * Documentation update
