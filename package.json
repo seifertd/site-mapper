@@ -6,7 +6,7 @@
   },
   "name": "site-mapper",
   "description": "sitemap.xml generation in node.js",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "homepage": "https://github.com/seifertd/site-mapper",
   "keywords": [
     "sitemap"
