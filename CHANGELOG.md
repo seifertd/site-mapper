@@ -1,3 +1,7 @@
+0.0.10 / 2013-12-16
+------------------
+* Make sure sitemap files are flushed and closed
+
 0.0.9 / 2013-11-18
 ------------------
 * Shore up CSV and HTTP source error handling
