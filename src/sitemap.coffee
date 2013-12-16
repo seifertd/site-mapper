@@ -1,6 +1,7 @@
 config = require './config'
 fs = require 'fs'
 Stream = require 'stream'
+async = require 'async'
 
 escapeXmlValue = (str) ->
   str.replace(/&/g, '&amp;')
@@ -34,7 +35,7 @@ module.exports = class Sitemap
 
     @gzipper.on 'end', =>
       sitemapThis.flushed = true
-    @file.on 'end', =>
+    @file.on 'close', =>
       sitemapThis.fileFlushed = true
     @stream.pipe(@gzipper).pipe(@file)
     @stream.emit 'data', config.sitemapHeader
@@ -42,14 +43,14 @@ module.exports = class Sitemap
   notifyWhenDone: (cb) ->
     sitemapThis = this
     process.nextTick =>
-      if sitemapThis.flushed && sitemapThis.fileFlushed
-        console.log "!! sitemap done #{sitemapThis.fileName}, #{sitemapThis.urlCount} urls"
-        cb(null, true)
-      else
-        sitemapThis.gzipper.on 'end', =>
-          sitemapThis.file.on 'end', =>
-            console.log "!! sitemap done #{sitemapThis.fileName}, #{sitemapThis.urlCount} urls"
-            cb(null, true)
+      async.until(
+        -> sitemapThis.flushed && sitemapThis.fileFlushed
+        (untilCb) ->
+          setTimeout(untilCb, 1000)
+        (err) ->
+          console.log "!! sitemap done #{sitemapThis.fileName}, #{sitemapThis.urlCount} urls, err: #{err}"
+          cb(err, true)
+      )
 
   close: ->
     return if @closed
