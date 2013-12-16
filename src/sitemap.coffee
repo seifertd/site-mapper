@@ -26,6 +26,7 @@ module.exports = class Sitemap
     @file = fs.createWriteStream(@fileName)
     @stream = new Stream()
     @flushed = false
+    @fileFlushed = false
     @closed = false
     @gzipper = require('zlib').createGzip()
 
@@ -33,19 +34,22 @@ module.exports = class Sitemap
 
     @gzipper.on 'end', =>
       sitemapThis.flushed = true
+    @file.on 'end', =>
+      sitemapThis.fileFlushed = true
     @stream.pipe(@gzipper).pipe(@file)
     @stream.emit 'data', config.sitemapHeader
 
   notifyWhenDone: (cb) ->
     sitemapThis = this
     process.nextTick =>
-      if sitemapThis.flushed
+      if sitemapThis.flushed && sitemapThis.fileFlushed
         console.log "!! sitemap done #{sitemapThis.fileName}, #{sitemapThis.urlCount} urls"
         cb(null, true)
       else
         sitemapThis.gzipper.on 'end', =>
-          console.log "!! sitemap done #{sitemapThis.fileName}, #{sitemapThis.urlCount} urls"
-          cb(null, true)
+          sitemapThis.file.on 'end', =>
+            console.log "!! sitemap done #{sitemapThis.fileName}, #{sitemapThis.urlCount} urls"
+            cb(null, true)
 
   close: ->
     return if @closed
