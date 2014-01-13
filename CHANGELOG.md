@@ -1,3 +1,7 @@
+0.0.11 / 2014-01-13
+------------------
+* If a http source generates no urls, return error
+
 0.0.10 / 2013-12-16
 ------------------
 * Make sure sitemap files are flushed and closed

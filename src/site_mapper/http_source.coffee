@@ -31,13 +31,19 @@ module.exports = class HttpSource extends Source
       else
         urls = @bodyProcessor(body)
         console.log "Read #{body.length} bytes from #{@url}, #{urls.length} urls, first: #{util.inspect urls[0]}, status: #{response.statusCode}"
-        each urls, (url) =>
-          cb {
-            url: @urlFormatter(url)
-            channel: @defaultChannel || @channelForUrl(url)
-            updatedAt: url.updatedAt || updatedAt
-            changefreq: @changefreq
-            priority: @priority
-            image: url.image
-          }
-        @end()
+        if urls.length <= 0
+          @error
+            message: "Despite 200 response, no valid urls were returned"
+            statusCode: 204
+            url: @url
+        else
+          each urls, (url) =>
+            cb {
+              url: @urlFormatter(url)
+              channel: @defaultChannel || @channelForUrl(url)
+              updatedAt: url.updatedAt || updatedAt
+              changefreq: @changefreq
+              priority: @priority
+              image: url.image
+            }
+          @end()
