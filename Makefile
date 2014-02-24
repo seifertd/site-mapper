@@ -45,7 +45,11 @@ ifndef VERSION
 	$(error VERSION is undefined)
 endif
 
-release : test check-version
+tag : check-version
+	git tag v$(VERSION)
+	git push --tags
+
+release : test check-version tag
 	@mkdir -p build
 	@rm -rf build/site-mapper; ln -sf $(PWD) build/site-mapper
 	@echo "Creating release $(VERSION)"
