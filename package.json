@@ -27,8 +27,8 @@
     "coffee-script-redux": "2.0.0-beta7",
     "underscore": "1.5.x",
     "request": "2.12.x",
-    "csv": "> 0",
-    "async": "> 0"
+    "csv": "0.x",
+    "async": "0.x"
   },
   "devDependencies": {
     "testutil": "0.2.x",
