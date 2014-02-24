@@ -1,3 +1,7 @@
+0.0.12 / 2014-02-24
+------------------
+* Fix problem with dependency references in package.json
+
 0.0.11 / 2014-01-13
 ------------------
 * If a http source generates no urls, return error
