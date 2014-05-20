@@ -1,3 +1,7 @@
+0.0.13 / 2014-05-20
+------------------
+* Fix csv dependency to 0.3.x
+
 0.0.12 / 2014-02-24
 ------------------
 * Fix problem with dependency references in package.json
