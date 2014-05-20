@@ -1,3 +1,7 @@
+0.1.0 / 2014-05-20
+------------------
+* Export the Source base class
+
 0.0.13 / 2014-05-20
 ------------------
 * Fix csv dependency to 0.3.x

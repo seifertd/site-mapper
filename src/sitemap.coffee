@@ -65,7 +65,7 @@ module.exports = class Sitemap
       @stream.emit 'data', urlXml(url)
     catch ex
       util = require 'util'
-      console.log "!!ERROR: Could not convert url: #{util.inspect url} to xml"
+      console.log "!!ERROR: Could not convert url: #{util.inspect url} to xml: #{util.inspect ex}"
 
   asIndexXml: ->
     "<sitemap><loc>#{escapeXmlValue(@location)}</loc><lastmod>#{new Date().toISOString()}</lastmod></sitemap>"

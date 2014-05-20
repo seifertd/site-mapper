@@ -1,5 +1,6 @@
 config = require './config'
 SiteMapper = require './site_mapper'
+Source = require './site_mapper/source'
 HttpSource = require './site_mapper/http_source'
 StaticSetSource = require './site_mapper/static_set_source'
 CsvFileSource = require './site_mapper/csv_file_source'
@@ -21,4 +22,4 @@ generateSitemaps = ->
 
   sitemapper.generateSitemap()
 
-module.exports = {generateSitemaps, HttpSource, StaticSetSource, SiteMapper, CsvFileSource, config}
+module.exports = {generateSitemaps, Source, HttpSource, StaticSetSource, SiteMapper, CsvFileSource, config}
