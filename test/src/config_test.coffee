@@ -9,7 +9,7 @@ describe 'config', ->
     expect(config.testing).to.be_true
 
   it 'can read the default configuration', ->
-    expect(config.targetDirectory).to.equal "#{process.cwd()}/tmp/sitemaps/test"
+    expect(config.defaultSitemapConfig.targetDirectory).to.equal "#{process.cwd()}/tmp/sitemaps/test"
 
   describe 'app specific', ->
     before ->
@@ -18,5 +18,5 @@ describe 'config', ->
     it 'can be found', ->
       expect(config.foo).to.equal 'bar'
 
-    it 'overrides defaults', ->
-      expect(config.sitemapIndex).to.equal 'testSitemap.xml'
+    it 'sets sitemap configurations', ->
+      expect(config.sitemaps["test.com"].urlBase).to.equal "http://test.com"

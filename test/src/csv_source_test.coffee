@@ -1,3 +1,4 @@
+config = require 'config'
 expect = require('chai').expect
 bond = require 'bondjs'
 
@@ -6,8 +7,11 @@ CsvFileSource = require 'site_mapper/csv_file_source'
 util = require 'util'
 
 describe 'csv file source', ->
+  before ->
+    @urlFormatter = config.defaultUrlFormatter({urlBase: "http://test.com"})
+
   it 'parses csv and produces urls', (done) ->
-    source = new CsvFileSource {changefreq: 'foo', priority: 1, channel: 'csv', fileName: "#{process.cwd()}/config/test.csv"}
+    source = new CsvFileSource {changefreq: 'foo', priority: 1, channel: 'csv', fileName: "#{process.cwd()}/config/test.csv", urlFormatter: @urlFormatter}
     urlCb = bond()
     source.on 'done', ->
       expect(urlCb.called).to.equal 5
@@ -22,7 +26,7 @@ describe 'csv file source', ->
     source.generateUrls urlCb
 
   it 'fails when csv file is bad', (done) ->
-    source = new CsvFileSource {changefreq: 'foo', priority: 1, channel: 'csv', fileName: "#{process.cwd()}/config/error.csv"}
+    source = new CsvFileSource {changefreq: 'foo', priority: 1, channel: 'csv', fileName: "#{process.cwd()}/config/error.csv", urlFormatter: @urlFormatter}
     doneCb = bond()
     urlCb = bond()
     source.on 'done', doneCb

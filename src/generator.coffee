@@ -10,16 +10,9 @@ generateSitemaps = ->
   # Extend the config with app specific config
   config.addAppSpecific()
 
-
-  sitemapper = new SiteMapper
-  sourceDefinitions = config.sources
-  throw "No sitemap Source definitions" if isEmpty sourceDefinitions
-
-  each sourceDefinitions, (sourceDefinition) ->
-    clazz = sourceDefinition.type
-    source = new clazz(sourceDefinition.options)
-    sitemapper.addSource source
-
-  sitemapper.generateSitemap()
+  each config.sitemaps, (sitemapConfig, sitemapName) ->
+    console.log "Generating sitemaps for configuration #{sitemapName}"
+    sitemapper = new SiteMapper(sitemapConfig)
+    sitemapper.generateSitemap()
 
 module.exports = {generateSitemaps, Source, HttpSource, StaticSetSource, SiteMapper, CsvFileSource, config}

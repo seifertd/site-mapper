@@ -2,8 +2,10 @@
 
 module.exports =
   foo: 'bar'
-  sitemapIndex: 'testSitemap.xml'
-  urlBase: 'http://test.com'
+  sitemaps:
+    "test.com":
+      sitemapIndex: 'testSitemap.xml'
+      urlBase: 'http://test.com'
   sources:
     source1:
       type: StaticSetSource

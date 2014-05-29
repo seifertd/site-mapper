@@ -4,14 +4,15 @@ async = require 'async'
 Sitemap = require './sitemap'
 
 module.exports = class SitemapGroup
-  constructor: (channel) ->
+  constructor: (sitemapConfig, channel) ->
     console.log "Creating SitemapGroup for channel #{channel}"
-    @baseUrl = "#{config.sitemapRootUrl}#{config.sitemapFileDirectory}"
-    @directory = config.targetDirectory
+    @sitemapConfig = sitemapConfig
+    @baseUrl = "#{@sitemapConfig.sitemapRootUrl}#{@sitemapConfig.sitemapFileDirectory}"
+    @directory = @sitemapConfig.targetDirectory
     @channel = channel
     @urlCount = 0
     @groupCount = 1
-    @maxUrlsPerFile = config.maxUrlsPerFile
+    @maxUrlsPerFile = @sitemapConfig.maxUrlsPerFile
     @sitemaps = []
 
   addUrl: (url) ->
@@ -24,7 +25,7 @@ module.exports = class SitemapGroup
     fileName = "#{@channel}#{sitemapIndex}.xml.gz"
     sitemap = @sitemaps[sitemapIndex]
     if !sitemap?
-      sitemap = @sitemaps[sitemapIndex] = new Sitemap("#{@baseUrl}/#{fileName}", "#{@directory}/#{fileName}")
+      sitemap = @sitemaps[sitemapIndex] = new Sitemap(@sitemapConfig, "#{@baseUrl}/#{fileName}", "#{@directory}/#{fileName}")
 
     sitemap
 

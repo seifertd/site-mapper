@@ -17,9 +17,10 @@ urlXml = (url) ->
   xml + "</url>"
 
 module.exports = class Sitemap
-  constructor: (location, fileName) ->
+  constructor: (sitemapConfig, location, fileName) ->
     @location = location
     @fileName = fileName
+    @sitemapConfig = sitemapConfig
     @urlCount = 0
  
   open: ->
@@ -38,7 +39,7 @@ module.exports = class Sitemap
     @file.on 'close', =>
       sitemapThis.fileFlushed = true
     @stream.pipe(@gzipper).pipe(@file)
-    @stream.emit 'data', config.sitemapHeader
+    @stream.emit 'data', @sitemapConfig.sitemapHeader
 
   notifyWhenDone: (cb) ->
     sitemapThis = this

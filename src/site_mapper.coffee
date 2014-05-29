@@ -3,12 +3,12 @@ util = require 'util'
 async = require 'async'
 fs = require 'fs'
 SitemapGroup = require './sitemap_group'
-
-{each, map, reduce} = require 'underscore'
+{each, map, reduce, extend} = require 'underscore'
 
 module.exports = class SiteMapper
-  constructor: ->
-    @targetDirectory = config.targetDirectory
+  constructor: (sitemapConfig) ->
+    @sitemapConfig = extend {}, config.defaultSitemapConfig, sitemapConfig
+    @targetDirectory = @sitemapConfig.targetDirectory
     buildDir = (parentPath, nextPath) ->
       fullPath = if parentPath.length > 0 && parentPath != "/" then "#{parentPath}/#{nextPath}" else "#{parentPath}#{nextPath}"
       if fullPath != "." && fullPath != ""
@@ -18,12 +18,37 @@ module.exports = class SiteMapper
       fullPath
 
     reduce @targetDirectory.split('/'), buildDir, ''
-    @sitemapIndex = config.sitemapIndex
-    @sources = []
+    @sitemapIndex = @sitemapConfig.sitemapIndex
+    @sources = @initializeSources()
     @sitemapGroups = {}
 
-  addSource: (source) ->
-    @sources.push source
+  initializeSources: ->
+    console.log "Initializing sources, config = #{util.inspect @sitemapConfig.sources}"
+    @sources = []
+    buildSource = (sourceDefinition) =>
+      sourceConfig = sourceDefinition(@sitemapConfig)
+      sourceClass = sourceConfig.type
+      new sourceClass(extend {}, {urlFormatter: config.defaultUrlFormatter(@sitemapConfig)}, sourceConfig.options)
+    each config.sources, (sourceDefinition, sourceName) =>
+      if @sitemapConfig.sources?.includes?.length > 0
+        # If there is an explicit includes list, only include sources in this list
+        if @sitemapConfig.sources.includes.indexOf(sourceName) >= 0
+          console.log " -> Including source #{sourceName} because it is in includes: #{@sitemapConfig.sources.includes.indexOf(sourceName)}"
+          @sources.push buildSource(sourceDefinition)
+      else
+        if @sitemapConfig.sources?.excludes?.length > 0
+          # Skip this if it is in the excludes
+          if @sitemapConfig.sources.excludes.indexOf(sourceName) >= 0
+            console.log " -> Skipping source #{sourceName} because it is in excludes"
+            return
+        console.log " -> Including source #{sourceName} because it is in not in excludes #{@sitemapConfig.sources.excludes.indexOf(sourceName)}"
+        @sources.push buildSource(sourceDefinition)
+
+    # Error if we defined no sources
+    throw "No sitemap Source definitions" if @sources.length <= 0
+
+    @sources
+
 
   generateSitemap: ->
     console.log "Generating sitemaps for #{@sources.length} sources, environment = #{config.env} ..."
@@ -56,8 +81,8 @@ module.exports = class SiteMapper
 
   createIndex: ->
     console.log "Creating sitemap index..."
-    index = fs.createWriteStream("#{config.targetDirectory}/#{config.sitemapIndex}")
-    index.write(config.sitemapIndexHeader)
+    index = fs.createWriteStream("#{@sitemapConfig.targetDirectory}/#{@sitemapConfig.sitemapIndex}")
+    index.write(@sitemapConfig.sitemapIndexHeader)
     each @sitemapGroups, (group, channel) ->
       each group.sitemaps, (sitemap) ->
         index.write sitemap.asIndexXml()
@@ -71,5 +96,5 @@ module.exports = class SiteMapper
   sitemapGroupForChannel: (channel) ->
     group = @sitemapGroups[channel]
     unless group?
-      group = @sitemapGroups[channel] = new SitemapGroup(channel)
+      group = @sitemapGroups[channel] = new SitemapGroup(@sitemapConfig, channel)
     group
