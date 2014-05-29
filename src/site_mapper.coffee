@@ -82,7 +82,7 @@ module.exports = class SiteMapper
   createIndex: ->
     console.log "Creating sitemap index..."
     index = fs.createWriteStream("#{@sitemapConfig.targetDirectory}/#{@sitemapConfig.sitemapIndex}")
-    index.write(@sitemapConfig.sitemapIndexHeader)
+    index.write(config.sitemapIndexHeader)
     each @sitemapGroups, (group, channel) ->
       each group.sitemaps, (sitemap) ->
         index.write sitemap.asIndexXml()

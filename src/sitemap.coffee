@@ -39,7 +39,7 @@ module.exports = class Sitemap
     @file.on 'close', =>
       sitemapThis.fileFlushed = true
     @stream.pipe(@gzipper).pipe(@file)
-    @stream.emit 'data', @sitemapConfig.sitemapHeader
+    @stream.emit 'data', config.sitemapHeader
 
   notifyWhenDone: (cb) ->
     sitemapThis = this

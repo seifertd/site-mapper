@@ -83,32 +83,49 @@ configuration file.
 ```coffee
 config = {}
 config.sources = {}
-config.targetDirectory = "#{process.cwd()}/tmp/sitemaps/#{config.env}"
-config.sitemapIndex = "sitemap.xml"
-config.sitemapRootUrl = "http://www.mysite.com"
-config.sitemapFileDirectory = "/sitemaps"
+config.sitemaps = {}
+config.defaultSitemapConfig = {
+  targetDirectory: "#{process.cwd()}/tmp/sitemaps/#{config.env}"
+  sitemapIndex: "sitemap.xml"
+  sitemapRootUrl: "http://www.mysite.com"
+  sitemapFileDirectory: "/sitemaps"
+  maxUrlsPerFile: 50000
+  urlBase: "http://www.mysite.com"
+}
 config.sitemapIndexHeader = '<?xml version="1.0" encoding="UTF-8"?><sitemapindex xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/siteindex.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'
 config.sitemapHeader = '<?xml version="1.0" encoding="UTF-8"?><urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:video="http://www.google.com/schemas/sitemap-video/1.1" xmlns:geo="http://www.google.com/geo/schemas/sitemap/1.0" xmlns:news="http://www.google.com/schemas/sitemap-news/0.9/">'
-config.maxUrlsPerFile = 50000
-config.urlBase = "http://www.mysite.com"
-config.defaultUrlFormatter = (href) ->
-  if '/' == href
-    config.urlBase
-  else if href && href.length && href[0] == '/'
-    "#{config.urlBase}#{href}"
-  else if href && href.length && href.match(/^https?:\/\//)
-    href
-  else
-    if href.length
-      "#{config.urlBase}/#{href}"
+config.defaultUrlFormatter = (options) ->
+  (href) ->
+    if '/' == href
+      options.urlBase
+    else if href && href.length && href[0] == '/'
+      "#{options.urlBase}#{href}"
+    else if href && href.length && href.match(/^https?:\/\//)
+      href
     else
-      config.urlBase
-
-module.exports = config
+      if href.length
+        "#{options.urlBase}/#{href}"
+      else
+        options.urlBase
 ```
 
-The sources object contains arbitrarily named keys pointing at objects with the
-following keys: type, options.  The type is either one of the built in Source
+The sitemaps object contains named keys pointing at objects that define a 
+particular sitemap.  The sitemap definition can contain (and override) any
+of the keys in the config.defaultSitemapConfig object.
+The produced sitemap consists of a sitemap index xml file referencing one or
+more gzipped sitemap xml files, created from urls produced by the config.sources objects.
+The configuration allows for defining 1 or more sitemaps to create, for example,
+you might configure one sitemap for the http version of a site and another sitemap
+for the https version of the site.  Or you might define one sitemap for the
+www subdomain and another for the foobar subdomain.
+
+The sources object contains arbitrarily named keys pointing at functions that take
+a single sitemapConfig object and return an object with the
+following keys: type, options.  The input parameter, sitemapConfig, is an object
+formed by merging the config.defaultSitemapConfig object with a specific sitemap
+configuration (more about this later).
+
+In the returned object, the type is either one of the built in Source
 types (see below) or a site specific class derived from the Source base class.
 See the test suite for examples of creating Source subclasses.
 
@@ -117,9 +134,12 @@ A minimal config might be:
 ```coffee
 {StaticSetSource, HttpSource} = require 'site-mapper'
 appConfig =
-  sitemapRootUrl: "http://staging.mysite.com"
-  urlBase: "http://staging.mysite.com"
-  sitemapIndex: "sitemap_index.xml"
+  sitemaps:
+    main:
+      sitemapRootUrl: "http://staging.mysite.com"
+      urlBase: "http://staging.mysite.com"
+      sitemapIndex: "sitemap_index.xml"
+      targetDirectory: "#{process.cwd()}/tmp/sitemaps/#{config.env}/http"
   sources:
     staticUrls:
       type: StaticSetSource
