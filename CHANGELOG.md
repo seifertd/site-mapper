@@ -1,3 +1,6 @@
+1.0.0 / 2014-05-29
+* Allow multiple sitemap definitions per environment
+
 0.1.0 / 2014-05-20
 ------------------
 * Export the Source base class
