@@ -117,7 +117,22 @@ more gzipped sitemap xml files, created from urls produced by the config.sources
 The configuration allows for defining 1 or more sitemaps to create, for example,
 you might configure one sitemap for the http version of a site and another sitemap
 for the https version of the site.  Or you might define one sitemap for the
-www subdomain and another for the foobar subdomain.
+www subdomain and another for the foobar subdomain.  By default, all sources
+defined in config.sources are used to generate urls for all sitemaps.  To use
+different sources for different sitemaps, provide in each sitemap configuration object
+a sources key like one of the following:
+
+```coffee
+# Specify which sources to include. All others are ignored
+sources:
+  includes: ['source1', 'source2', ...]
+```
+or
+```coffee
+# Specify which sources to exclude. All others are included
+sources:
+  excludes: ['source1', 'source2', ...]
+```
 
 The sources object contains arbitrarily named keys pointing at functions that take
 a single sitemapConfig object and return an object with the
