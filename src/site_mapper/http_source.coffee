@@ -16,6 +16,7 @@ module.exports = class HttpSource extends Source
     @defaultChannel = @options.channel
     @channelForUrl = @options.channelForUrl || defaultChannelForUrl
     @bodyProcessor = @options.bodyProcessor || defaultBodyProcessor
+    @allowNoUrls = @options.allowNoUrls
 
   _generateUrls: (cb) ->
     console.log "Generating sitemap urls from service url #{@url}"
@@ -31,7 +32,7 @@ module.exports = class HttpSource extends Source
       else
         urls = @bodyProcessor(body)
         console.log "Read #{body.length} bytes from #{@url}, #{urls.length} urls, first: #{util.inspect urls[0]}, status: #{response.statusCode}"
-        if urls.length <= 0
+        if urls.length <= 0 && !@allowNoUrls
           @error
             message: "Despite 200 response, no valid urls were returned"
             statusCode: 204
