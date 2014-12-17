@@ -11,7 +11,7 @@ of a package.json file:
 ```json
 {
   "dependencies": {
-    "site-mapper": ">= 0.0.7"
+    "site-mapper": ">= 1.0.1"
   }
 }
 ```
@@ -44,7 +44,7 @@ Create a package.json file similar to the following:
     "sitemap"
   ],
   "dependencies": {
-    "site-mapper": ">= 0.0.7"
+    "site-mapper": ">= 1.0.1"
   },
   "engines": {
     "node": "*"
@@ -70,7 +70,7 @@ the coffee script module as a dependency:
 ```json
 {
   "dependencies": {
-    "site-mapper": ">= 0.0.7"
+    "site-mapper": ">= 1.0.1"
     ,"coffee-script-redux": ">0"
   }
 }
