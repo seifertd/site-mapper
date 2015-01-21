@@ -1,3 +1,6 @@
+1.0.2 / 2015-01-21
+* Do not blow up if http request returns empty body
+
 1.0.0 / 2014-05-29
 * Allow multiple sitemap definitions per environment
 
