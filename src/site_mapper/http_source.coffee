@@ -7,7 +7,7 @@ defaultChannelForUrl = (url) ->
   url.split('/')[0]
 
 defaultBodyProcessor = (body) ->
-  body.split("\n")
+  if body? then body.split("\n") else []
 
 module.exports = class HttpSource extends Source
   constructor: (options) ->
