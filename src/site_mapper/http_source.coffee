@@ -31,7 +31,7 @@ module.exports = class HttpSource extends Source
           url: @url
       else
         urls = @bodyProcessor(body)
-        console.log "Read #{body.length} bytes from #{@url}, #{urls.length} urls, first: #{util.inspect urls[0]}, status: #{response.statusCode}"
+        console.log "Read #{body?.length || 0} bytes from #{@url}, #{urls.length} urls, first: #{util.inspect urls[0]}, status: #{response.statusCode}"
         if urls.length <= 0 && !@allowNoUrls
           @error
             message: "Despite 200 response, no valid urls were returned"
