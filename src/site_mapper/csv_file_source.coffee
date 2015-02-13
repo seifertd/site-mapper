@@ -9,7 +9,7 @@ module.exports = class CsvFileSource extends Source
     @channel = options.channel
 
   _generateUrls: (cb) ->
-    console.log "Generating sitemap urls from csv #{@fileName}"
+    @out.write "Generating sitemap urls from csv #{@fileName}\n"
     updatedAt = new Date()
     try
       csv().from.path(@fileName).on('record', (row, index) =>
@@ -25,9 +25,9 @@ module.exports = class CsvFileSource extends Source
       ).on('error', (err) =>
         @error(err)
       ).on('end', (count) =>
-        console.log "!! Read #{count} urls from csv"
+        @out.write "!! Read #{count} urls from csv\n"
         @end()
       )
     catch err
-      console.log "!! exception parsing csv #{err}"
+      @out.write "!! exception parsing csv #{err}\n"
       @error(err)

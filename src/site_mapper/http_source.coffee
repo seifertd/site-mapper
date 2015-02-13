@@ -19,7 +19,7 @@ module.exports = class HttpSource extends Source
     @allowNoUrls = @options.allowNoUrls
 
   _generateUrls: (cb) ->
-    console.log "Generating sitemap urls from service url #{@url}"
+    @out.write "Generating sitemap urls from service url #{@url}\n"
     updatedAt = new Date()
     request @url, (error, response, body) =>
       if error
@@ -31,7 +31,7 @@ module.exports = class HttpSource extends Source
           url: @url
       else
         urls = @bodyProcessor(body)
-        console.log "Read #{body?.length || 0} bytes from #{@url}, #{urls.length} urls, first: #{util.inspect urls[0]}, status: #{response.statusCode}"
+        @out.write "Read #{body?.length || 0} bytes from #{@url}, #{urls.length} urls, first: #{util.inspect urls[0]}, status: #{response.statusCode}\n"
         if urls.length <= 0 && !@allowNoUrls
           @error
             message: "Despite 200 response, no valid urls were returned"

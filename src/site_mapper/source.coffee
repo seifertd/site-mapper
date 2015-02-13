@@ -7,6 +7,7 @@ module.exports = class Source extends EventEmitter
     @changefreq = options.changefreq
     @priority = options.priority
     @urlFormatter = options.urlFormatter
+    @out = options.out
 
   generateUrls: (cb) ->
     @_generateUrls cb 

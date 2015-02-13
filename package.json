@@ -32,8 +32,10 @@
   },
   "devDependencies": {
     "testutil": "0.2.x",
+    "concat-stream": "1.4.x",
     "mocha": "1.3.x",
     "chai": "1.5.x",
+    "semver": ">0",
     "bondjs": "0.x"
   },
   "engines": {

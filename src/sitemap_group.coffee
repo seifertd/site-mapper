@@ -5,7 +5,7 @@ Sitemap = require './sitemap'
 
 module.exports = class SitemapGroup
   constructor: (sitemapConfig, channel) ->
-    console.log "Creating SitemapGroup for channel #{channel}"
+    sitemapConfig.generateOptions.out.write "Creating SitemapGroup for channel #{channel}\n"
     @sitemapConfig = sitemapConfig
     @baseUrl = "#{@sitemapConfig.sitemapRootUrl}#{@sitemapConfig.sitemapFileDirectory}"
     @directory = @sitemapConfig.targetDirectory

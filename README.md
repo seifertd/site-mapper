@@ -289,5 +289,4 @@ mechanisms in site-mapper.
 
 make test
 
-This should install all dependencies, compile the coffeescript files into
-javascript and run the test suite
+This should install all dependencies and run the test suite using coffee

@@ -1,4 +1,4 @@
-{StaticSetSource} = require '../../lib/generator'
+{StaticSetSource} = require '../../src/generator'
 
 module.exports =
   foo: 'bar'
@@ -7,7 +7,7 @@ module.exports =
       sitemapIndex: 'testSitemap.xml'
       urlBase: 'http://test.com'
   sources:
-    source1:
+    source1: (sitemapConfig) ->
       type: StaticSetSource
       options:
         channel: 'channel1'
@@ -19,7 +19,7 @@ module.exports =
           '/faq',
           '/jobs'
         ]
-    source2:
+    source2: (sitemapConfig) ->
       type: StaticSetSource
       options:
         channel: 'channel2'

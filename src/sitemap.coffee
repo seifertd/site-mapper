@@ -24,7 +24,7 @@ module.exports = class Sitemap
     @urlCount = 0
  
   open: ->
-    console.log "!! sitemap open #{@fileName}"
+    @sitemapConfig.generateOptions.out.write "!! sitemap open #{@fileName}\n"
     @file = fs.createWriteStream(@fileName)
     @stream = new Stream()
     @flushed = false
@@ -49,7 +49,7 @@ module.exports = class Sitemap
         (untilCb) ->
           setTimeout(untilCb, 1000)
         (err) ->
-          console.log "!! sitemap done #{sitemapThis.fileName}, #{sitemapThis.urlCount} urls, err: #{err}"
+          sitemapThis.sitemapConfig.generateOptions.out.write "!! sitemap done #{sitemapThis.fileName}, #{sitemapThis.urlCount} urls, err: #{err}\n"
           cb(err, true)
       )
 
@@ -66,7 +66,7 @@ module.exports = class Sitemap
       @stream.emit 'data', urlXml(url)
     catch ex
       util = require 'util'
-      console.log "!!ERROR: Could not convert url: #{util.inspect url} to xml: #{util.inspect ex}"
+      @sitemapConfig.generateOptions.out.write "!!ERROR: Could not convert url: #{util.inspect url} to xml: #{util.inspect ex}\n"
 
   asIndexXml: ->
     "<sitemap><loc>#{escapeXmlValue(@location)}</loc><lastmod>#{new Date().toISOString()}</lastmod></sitemap>"

@@ -23,25 +23,28 @@ module.exports = class SiteMapper
     @sitemapGroups = {}
 
   initializeSources: ->
-    console.log "Initializing sources, config = #{util.inspect @sitemapConfig.sources}"
     @sources = []
     buildSource = (sourceDefinition) =>
       sourceConfig = sourceDefinition(@sitemapConfig)
       sourceClass = sourceConfig.type
-      new sourceClass(extend {}, {urlFormatter: config.defaultUrlFormatter(@sitemapConfig)}, sourceConfig.options)
+      new sourceClass(extend {}, {out: @sitemapConfig.generateOptions.out, urlFormatter: config.defaultUrlFormatter(@sitemapConfig)}, sourceConfig.options)
+
+
+    @sitemapConfig.generateOptions.out.write "Initializing sources: #{util.inspect config.sources}, sourceConfig = #{util.inspect @sitemapConfig.sources}\n"
     each config.sources, (sourceDefinition, sourceName) =>
+      @sitemapConfig.generateOptions.out.write "Working on source #{sourceName}: #{util.inspect sourceDefinition}\n"
       if @sitemapConfig.sources?.includes?.length > 0
         # If there is an explicit includes list, only include sources in this list
-        if @sitemapConfig.sources.includes.indexOf(sourceName) >= 0
-          console.log " -> Including source #{sourceName} because it is in includes: #{@sitemapConfig.sources.includes.indexOf(sourceName)}"
+        if @sitemapConfig.sources?.includes?.indexOf(sourceName) >= 0
+          @sitemapConfig.generateOptions.out.write " -> Including source #{sourceName} because it is in includes: #{@sitemapConfig.sources?.includes?.indexOf(sourceName)}\n"
           @sources.push buildSource(sourceDefinition)
       else
         if @sitemapConfig.sources?.excludes?.length > 0
           # Skip this if it is in the excludes
-          if @sitemapConfig.sources.excludes.indexOf(sourceName) >= 0
-            console.log " -> Skipping source #{sourceName} because it is in excludes"
+          if @sitemapConfig.sources?.excludes?.indexOf(sourceName) >= 0
+            @sitemapConfig.generateOptions.out.write " -> Skipping source #{sourceName} because it is in excludes\n"
             return
-        console.log " -> Including source #{sourceName} because it is in not in excludes #{@sitemapConfig.sources.excludes.indexOf(sourceName)}"
+        @sitemapConfig.generateOptions.out.write " -> Including source #{sourceName} because it is in not in excludes #{@sitemapConfig.sources?.excludes?.indexOf(sourceName)}\n"
         @sources.push buildSource(sourceDefinition)
 
     # Error if we defined no sources
@@ -50,8 +53,9 @@ module.exports = class SiteMapper
     @sources
 
 
-  generateSitemap: ->
-    console.log "Generating sitemaps for #{@sources.length} sources, environment = #{config.env} ..."
+  generateSitemap: (generateCb) ->
+
+    @sitemapConfig.generateOptions.out.write "Generating sitemaps for #{@sources.length} sources, environment = #{config.env}, generateCb: #{util.inspect generateCb} ...\n"
     addUrlCb = (url) =>
       @addUrl(url)
     seriesTasks = []
@@ -66,7 +70,7 @@ module.exports = class SiteMapper
       async.parallel parallelTasks, (err, results) ->
         stCb(err, results)
     seriesTasks.push (stCb) =>
-      console.log "Waiting for sitemap groups ..."
+      @sitemapConfig.generateOptions.out.write "Waiting for sitemap groups ...\n"
       parallelTasks = map @sitemapGroups, (group, channel) =>
         (cb) ->
           group.notifyWhenDone cb
@@ -74,14 +78,21 @@ module.exports = class SiteMapper
         stCb(err, results)
     async.series seriesTasks, (err, results) =>
       if err?
-        console.log "\n\nERROR! generating sitemaps: #{util.inspect err}\n\n"
-        process.exit(2)
+        errorMessage = "ERROR! generating sitemaps: #{util.inspect err}"
+        @sitemapConfig.generateOptions.out.write "\n\n#{errorMessage}\n\n"
+        if generateCb?
+          generateCb(err, null)
+        else
+          process.exit(2)
       else
-        @createIndex()
+        @createIndex(generateCb)
 
-  createIndex: ->
-    console.log "Creating sitemap index..."
+  createIndex: (cb) ->
+    @sitemapConfig.generateOptions.out.write "Creating sitemap index #{@sitemapConfig.sitemapIndex} ...\n"
     index = fs.createWriteStream("#{@sitemapConfig.targetDirectory}/#{@sitemapConfig.sitemapIndex}")
+    if cb?
+      index.on 'finish', ->
+        cb()
     index.write(config.sitemapIndexHeader)
     each @sitemapGroups, (group, channel) ->
       each group.sitemaps, (sitemap) ->

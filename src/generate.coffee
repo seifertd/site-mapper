@@ -1,2 +1,4 @@
-{generateSitemaps} = require 'generator'
-generateSitemaps()
+{generateSitemaps} = require './generator'
+
+generateSitemaps () ->
+  console.log "generate done"
