@@ -11,7 +11,7 @@ of a package.json file:
 ```json
 {
   "dependencies": {
-    "site-mapper": ">= 1.0.1"
+    "site-mapper": ">= 1.1.0"
   }
 }
 ```
