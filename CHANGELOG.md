@@ -1,3 +1,6 @@
+1.0.3 / 2015-02-26
+* Support xhtml:link elements in urls
+
 1.0.2 / 2015-01-21
 * Do not blow up if http request returns empty body
 
