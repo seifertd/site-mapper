@@ -1,5 +1,8 @@
-1.0.3 / 2015-02-26
+1.1.1 / 2015-02-26
 * Support xhtml:link elements in urls
+
+1.1.0 / 2015-02-13
+* Add ability to output to stream instead of stdout
 
 1.0.2 / 2015-01-21
 * Do not blow up if http request returns empty body
