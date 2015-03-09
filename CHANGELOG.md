@@ -1,3 +1,7 @@
+1.1.2 / 2015-02-26
+* Make sure to add </url> close tag. Add test to make sure
+  this doesn not happen again
+
 1.1.1 / 2015-02-26
 * Support xhtml:link elements in urls
 
