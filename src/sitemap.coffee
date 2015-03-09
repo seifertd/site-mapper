@@ -17,8 +17,7 @@ urlXml = (url) ->
   if url.links?
     for link in url.links
       xml = xml + "<xhtml:link rel=\"#{link.rel}\" href=\"#{link.href}\"/>"
-  xml = xml + "</url>"
-  xml
+  xml + "</url>"
 
 module.exports = class Sitemap
   constructor: (sitemapConfig, location, fileName) ->
