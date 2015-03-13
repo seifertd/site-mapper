@@ -51,7 +51,7 @@ describe 'sitemap', ->
     it "can put xhtml link tags in sitemaps", (done) ->
       self = this
       @sitemap.stream = concat (xml) ->
-        expect(xml).to.match /<xhtml:link.*href="http%3A%2F%2Ffoo.com%2Flink"\/>/
+        expect(xml).to.match /<xhtml:link.*href="http:\/\/foo.com\/link"\/>/
         expect(self.sitemap.urlCount).to.equal 1
         done()
       @sitemap.stream.on 'data', (data) ->
