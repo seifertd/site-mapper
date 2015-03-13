@@ -39,12 +39,12 @@ module.exports = class HttpSource extends Source
             url: @url
         else
           each urls, (url) =>
-            cb {
+            cb
               url: @urlFormatter(url)
               channel: @defaultChannel || @channelForUrl(url)
               updatedAt: url.updatedAt || updatedAt
               changefreq: @changefreq
               priority: @priority
               image: url.image
-            }
+              linkTags: url.linkTags
           @end()

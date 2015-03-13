@@ -14,9 +14,9 @@ urlXml = (url) ->
   xml = "<url><loc>#{url.url}</loc><lastmod>#{url.updatedAt.toISOString()}</lastmod><changefreq>#{url.changefreq}</changefreq><priority>#{url.priority}</priority>"
   if url.image?
     xml = xml + "<image:image><image:loc>#{url.image}</image:loc></image:image>"
-  if url.links?
-    for link in url.links
-      xml = xml + "<xhtml:link rel=\"#{link.rel}\" href=\"#{link.href}\"/>"
+  if url.linkTags?
+    for linkTag in url.linkTags
+      xml = xml + "<xhtml:link rel=\"#{linkTag.rel}\" href=\"#{linkTag.href}\"/>"
   xml + "</url>"
 
 module.exports = class Sitemap
