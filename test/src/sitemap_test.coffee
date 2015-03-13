@@ -57,6 +57,6 @@ describe 'sitemap', ->
       @sitemap.stream.on 'data', (data) ->
         self.sitemap.stream.write(data)
 
-      @sitemap.addUrl({url:"http://foo.com/foo.html", updatedAt: new Date(), changefreq: 'daily', priority: 1, links: [{rel: 'alternate', href: "http://foo.com/link"}] })
+      @sitemap.addUrl({url:"http://foo.com/foo.html", updatedAt: new Date(), changefreq: 'daily', priority: 1, linkTags: [{rel: 'alternate', href: "http://foo.com/link"}] })
       @sitemap.stream.end()
 
