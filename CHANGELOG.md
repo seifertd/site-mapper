@@ -1,3 +1,6 @@
+1.1.3 / 2015-03-13
+* Remove use of link reserved word.
+
 1.1.2 / 2015-02-26
 * Make sure to add </url> close tag. Add test to make sure
   this doesn not happen again
