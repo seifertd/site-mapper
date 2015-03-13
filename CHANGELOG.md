@@ -1,3 +1,6 @@
+1.1.5 / 2015-03-13
+* Encode link tag using xml attribute escape function
+
 1.1.4 / 2015-03-13
 * Encode link tag attributes
 
