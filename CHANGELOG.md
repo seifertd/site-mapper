@@ -1,3 +1,6 @@
+1.1.4 / 2015-03-13
+* Encode link tag attributes
+
 1.1.3 / 2015-03-13
 * Remove use of link reserved word.
 
