@@ -16,7 +16,7 @@ urlXml = (url) ->
     xml = xml + "<image:image><image:loc>#{url.image}</image:loc></image:image>"
   if url.linkTags?
     for linkTag in url.linkTags
-      xml = xml + "<xhtml:link rel=\"#{encodeURIComponent(linkTag.rel)}\" href=\"#{encodeURIComponent(linkTag.href)}\"/>"
+      xml = xml + "<xhtml:link rel=\"#{escapeXmlValue(linkTag.rel)}\" href=\"#{escapeXmlValue(linkTag.href)}\"/>"
   xml + "</url>"
 
 module.exports = class Sitemap
