@@ -1,3 +1,7 @@
+1.1.7 / 2015-03-19
+* HTML source passes on all url attributes
+* Add ability to configure a url filter on a source
+
 1.1.6 / 2015-03-19
 * Add xmlns:xhtml namespace declaration
 
