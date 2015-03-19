@@ -1,6 +1,6 @@
 Source = require('./source')
 request = require('request')
-{each} = require 'underscore'
+{extend, each} = require 'underscore'
 util = require 'util'
 
 defaultChannelForUrl = (url) ->
@@ -39,12 +39,15 @@ module.exports = class HttpSource extends Source
             url: @url
         else
           each urls, (url) =>
-            cb
+            if typeof(url) is 'string'
+              urlObj = { url: url }
+            else
+              urlObj = url
+            myProps =
               url: @urlFormatter(url)
+              updatedAt: urlObj.updatedAt || updatedAt
               channel: @defaultChannel || @channelForUrl(url)
-              updatedAt: url.updatedAt || updatedAt
               changefreq: @changefreq
               priority: @priority
-              image: url.image
-              linkTags: url.linkTags
+            cb extend {}, urlObj, myProps
           @end()
