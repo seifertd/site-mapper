@@ -11,7 +11,7 @@ escapeXmlValue = (str) ->
      .replace(/'/g, '&apos;')
 
 urlXml = (url) ->
-  xml = "<url><loc>#{url.url}</loc><lastmod>#{url.updatedAt.toISOString()}</lastmod><changefreq>#{url.changefreq}</changefreq><priority>#{url.priority}</priority>"
+  xml = "<url><loc>#{escapeXmlValue(url.url)}</loc><lastmod>#{url.updatedAt.toISOString()}</lastmod><changefreq>#{url.changefreq}</changefreq><priority>#{url.priority}</priority>"
   if url.image?
     xml = xml + "<image:image><image:loc>#{url.image}</image:loc></image:image>"
   if url.linkTags?
