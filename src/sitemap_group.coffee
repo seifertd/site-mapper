@@ -37,4 +37,3 @@ module.exports = class SitemapGroup
         seriesTasks.push (cb) -> sitemap.notifyWhenDone(cb)
       async.series seriesTasks, (err, results) =>
         allDoneCb(err, results)
-

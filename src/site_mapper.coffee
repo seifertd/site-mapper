@@ -67,7 +67,7 @@ module.exports = class SiteMapper
           source.on 'error', (error) ->
             cb(error, null)
           source.generateUrls addUrlCb
-      async.parallel parallelTasks, (err, results) ->
+      async.series parallelTasks, (err, results) ->
         stCb(err, results)
     seriesTasks.push (stCb) =>
       @sitemapConfig.generateOptions.out.write "Waiting for sitemap groups ...\n"
