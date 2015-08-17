@@ -30,17 +30,17 @@ module.exports = class Sitemap
     @sitemapConfig.generateOptions.out.write "!! sitemap open #{@fileName}\n"
     @file = fs.createWriteStream(@fileName)
     @stream = new Stream()
-    @flushed = false
-    @fileFlushed = false
+    @gzipFinished = false
+    @fileFinished = false
     @closed = false
     @gzipper = require('zlib').createGzip()
 
     sitemapThis = this
 
-    @gzipper.on 'end', =>
-      sitemapThis.flushed = true
-    @file.on 'close', =>
-      sitemapThis.fileFlushed = true
+    @gzipper.on 'finish', =>
+      sitemapThis.gzipFinished = true
+    @file.on 'finish', =>
+      sitemapThis.fileFinished = true
     @stream.pipe(@gzipper).pipe(@file)
     @stream.emit 'data', config.sitemapHeader
 
@@ -48,7 +48,7 @@ module.exports = class Sitemap
     sitemapThis = this
     process.nextTick =>
       async.until(
-        -> sitemapThis.flushed && sitemapThis.fileFlushed
+        -> sitemapThis.gzipFinished && sitemapThis.fileFinished
         (untilCb) ->
           setTimeout(untilCb, 1000)
         (err) ->
