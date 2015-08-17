@@ -1,3 +1,13 @@
+1.2.0 / 2015-08-17
+* Use finish events to determine when file output is done
+* Change generator function to allow err and result objects on completion callback
+
+1.1.9 / 2015-08-03
+* Change sitemap generation to be serial to avoid killing cpu with large sitemaps
+
+1.1.8 / 2015-04-03
+* BUGFIX: Escape urls in sitemaps
+
 1.1.7 / 2015-03-19
 * HTML source passes on all url attributes
 * Add ability to configure a url filter on a source
