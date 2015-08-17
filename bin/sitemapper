@@ -6,4 +6,13 @@ var fs = require("fs");
 var path = require("path");
 var lib = path.join(path.dirname(fs.realpathSync(__filename)), '../lib');
 var generateSitemaps = require(lib + '/generator').generateSitemaps;
-generateSitemaps();
+
+var sitemapsDone = function(err, results) {
+  if (err) {
+    process.exit(1);
+  } else {
+    process.exit(0);
+  }
+};
+
+generateSitemaps(sitemapsDone);
