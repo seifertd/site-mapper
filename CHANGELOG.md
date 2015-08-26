@@ -1,3 +1,6 @@
+1.2.1 / 2015-08-26
+* Allow configuration to ignore source errors
+
 1.2.0 / 2015-08-17
 * Use finish events to determine when file output is done
 * Change generator function to allow err and result objects on completion callback
