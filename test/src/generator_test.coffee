@@ -1,5 +1,7 @@
 {expect} = require('chai')
 {generateSitemaps} = require '../../src/generator'
+HttpSource = require '../../src/site_mapper/http_source'
+config = require '../../src/config'
 libxmljs = require 'libxmljs'
 zlib = require 'zlib'
 concat = require 'concat-stream'
@@ -34,3 +36,40 @@ describe 'sitemap generator', ->
     @timeout(5000)
 
     generateSitemaps {out}
+
+  describe 'with a source with error', (done) ->
+    before ->
+      @sourceOptions =
+        type: HttpSource
+        options:
+          serviceUrl: "http://jdflasdfjlkdsjlsfdjlsdj.com/foo/bar"
+      config.sources.errorSource = (sitemapConfig) =>
+        @sourceOptions
+    describe 'with default config', ->
+      it 'fails', (done) ->
+        out = concat (log) ->
+          expect(log).to.match /ERROR\! generating sitemaps/
+
+        cb = (err, results) ->
+          expect(err).to.not.be_null
+          expect(results).to.be_null
+          done()
+
+        @timeout(5000)
+
+        generateSitemaps {out}, cb
+
+    describe 'with config to ignore errors', ->
+      before ->
+        @sourceOptions.options.ignoreErrors = true
+      it 'works', (done) ->
+        out = concat (log) ->
+          expect(log).to.match /\[IGNORING ERROR\]/
+
+        cb = (err, results) ->
+          expect(err).to.be_null
+          done()
+
+        @timeout(5000)
+
+        generateSitemaps {out}, cb

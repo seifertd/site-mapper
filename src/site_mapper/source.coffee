@@ -21,7 +21,13 @@ module.exports = class Source extends EventEmitter
 
   error: (err) ->
     process.nextTick =>
-      @emit('error', err)
+      util = require 'util'
+      unless @options.ignoreErrors
+        @emit('error', err)
+      else
+        util = require 'util'
+        @out.write "[IGNORING ERROR]: #{util.inspect err} by configuration\n"
+        @emit('done')
 
   _generateUrls: (cb) ->
     throw "Not Implemented Yet!"
