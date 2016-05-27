@@ -1,0 +1,13 @@
+{
+  "foo": "bar",
+  "data": {
+    "urls": [
+      {"url": "/url1"},
+      {"url": "/url2", "imageUrl": "/image2"},
+      {"url": "/url3", "imageUrl": "/image3"},
+      {"url": "/url4", "imageUrl": "/image4"},
+      {"url": "/url5"}
+    ],
+    "more": "stuff"
+  }
+}

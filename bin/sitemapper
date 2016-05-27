@@ -1,18 +1,19 @@
 #!/usr/bin/env node
+try {
+  require('coffee-script/register')
+} catch (err) {
+  console.log("WARN: coffee script config files will not be supported without coffee-script/register");
+}
 
+// set environment
 process.env.NODE_ENV = process.env.NODE_ENV || 'production';
+var generateSitemaps = require('../lib/main').generateSitemaps;
+var util = require('util');
 
-var fs = require("fs");
-var path = require("path");
-var lib = path.join(path.dirname(fs.realpathSync(__filename)), '../lib');
-var generateSitemaps = require(lib + '/generator').generateSitemaps;
-
-var sitemapsDone = function(err, results) {
+generateSitemaps(function(err) {
   if (err) {
     process.exit(1);
   } else {
     process.exit(0);
   }
-};
-
-generateSitemaps(sitemapsDone);
+});
