@@ -264,13 +264,16 @@ generate :
 
 The site-mapper module views the sitemap generation process as follows:
 
+SiteMapper creates one or more Source objects, pipes it to a Sitemap, which
+then pipes to one or more SitemapFile objects.
 
-    +--------+          +------------+        +--------------+       +-------------+
-    | Source |          | SiteMapper |        | Sitemap      |       | SitemapFile |
-    |--------|produces  |------------|  adds  |--------------| adds  |-------------|
-    |        +--------->|            |------->|              |------>|             |
-    |        |  urls    |            |  urls  |              | urls  |             |
-    +--------+          +------------+        +--------------+       +-------------+
+
+    +------------+          +------------+        +--------------+       +-------------+
+    | SiteMapper |          |   Source   |        | Sitemap      |       | SitemapFile |
+    |------------| creates  |------------| sends  |--------------| adds  |-------------|
+    |            +--------->|            |------->|              |------>|             |
+    |            |          |            |  urls  |              | urls  |             |
+    +------------+          +------------+        +--------------+       +-------------+
 
 ### Sources ###
 
