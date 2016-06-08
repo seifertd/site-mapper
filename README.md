@@ -218,6 +218,10 @@ appConfig =
 module.exports = appConfig
 ```
 
+### Logging ###
+site-mapper logs using bunyan format. To get pretty printed logs while running, just pipe
+the site-mapper output through the bunyan command line tool.
+
 ### Running the Code ###
 
 Finally, putting it all together, you can generate the sitemaps as follows:
@@ -229,7 +233,7 @@ Finally, putting it all together, you can generate the sitemaps as follows:
          ```
   1. Run the generator:
          ```
-         NODE_ENV=staging ./node_modules/.bin/site-mapper
+         NODE_ENV=staging ./node_modules/.bin/site-mapper | ./node_modules/site-mapper/node_modules/.bin/bunyan
          ```
 
 Below is a make file that encapsulates the above recipe.  It can be run
