@@ -99,7 +99,7 @@ export class Sitemap extends Writable {
       let channelFiles = this.filesForChannel(channel);
       if (channelFiles.length > 0) {
         let lastFileInChannel = channelFiles[channelFiles.length - 1];
-        config.log.trace(`CLOSING ${lastFileInChannel.fileName}`);
+        config.log.trace(`Closing ${lastFileInChannel.fileName}`);
         lastFileInChannel.close();
       }
     });

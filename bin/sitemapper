@@ -3,6 +3,13 @@ try {
   require('coffee-script/register')
 } catch (err) {
   console.log("WARN: coffee script config files will not be supported without coffee-script/register");
+  console.log("  -> run 'npm install coffee-script'");
+}
+try {
+  require('babel-register')
+} catch (err) {
+  console.log("WARN: es6 config files will not be supported without babel-register");
+  console.log("  -> run 'npm install babel-register'");
 }
 
 // set environment
