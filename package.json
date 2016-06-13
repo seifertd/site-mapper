@@ -21,6 +21,7 @@
   },
   "main": "./lib/main.js",
   "bin": "./bin/sitemapper",
+  "readmeFilename": "README.md",
   "keywords": [
     "es6",
     "es2015",
