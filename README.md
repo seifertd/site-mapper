@@ -113,14 +113,16 @@ configuration file.
 config = {}
 config.sources = {}
 config.sitemaps = {}
-config.defaultSitemapConfig = {
+config.logConfig =
+  name: "sitemapper",
+  level: "debug"
+config.defaultSitemapConfig =
   targetDirectory: "#{process.cwd()}/tmp/sitemaps/#{config.env}"
   sitemapIndex: "sitemap.xml"
   sitemapRootUrl: "http://www.mysite.com"
   sitemapFileDirectory: "/sitemaps"
   maxUrlsPerFile: 50000
   urlBase: "http://www.mysite.com"
-}
 config.sitemapIndexHeader = '<?xml version="1.0" encoding="UTF-8"?><sitemapindex xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/siteindex.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'
 config.sitemapHeader = '<?xml version="1.0" encoding="UTF-8"?><urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:video="http://www.google.com/schemas/sitemap-video/1.1" xmlns:geo="http://www.google.com/geo/schemas/sitemap/1.0" xmlns:news="http://www.google.com/schemas/sitemap-news/0.9/">'
 config.defaultUrlFormatter = (options) ->
@@ -209,7 +211,7 @@ appConfig =
           priority: 0.8
           channel: (url) -> url.category
           urlAugmenter: (url) ->
-            url.url = "http://www.mysite.com/widgets/#{url.category}/#{url.url}"
+            url.url = "http://#{sitemapConfig.urlBase}/widgets/#{url.category}/#{url.url}"
         input:
           url: "http://api.mysite.com/widgets"
         options:
@@ -268,20 +270,22 @@ generate :
 
 The site-mapper module views the sitemap generation process as follows:
 
-SiteMapper creates one or more Source objects, pipes it to a Sitemap, which
-then pipes to one or more SitemapFile objects.
+SiteMapper creates one or more Source objects, pipes each one to a Sitemap, which
+then pipes to one or more SitemapFile objects, depending on the number of urls the
+source produces and the configured maximum number of urls per SitemapFile (50,000
+by default).
 
 
     +------------+          +------------+        +--------------+       +-------------+
     | SiteMapper |          |   Source   |        | Sitemap      |       | SitemapFile |
-    |------------| creates  |------------| sends  |--------------| adds  |-------------|
+    |------------| creates  |------------|creates |--------------| adds  |-------------|
     |            +--------->|            |------->|              |------>|             |
     |            |          |            |  urls  |              | urls  |             |
     +------------+          +------------+        +--------------+       +-------------+
 
 ### Sources ###
 
-Sources are Javascript streaming API Transform implementation that operate in object mode
+Sources are Javascript streaming API Transform stream implementations that operate in object mode
 and produce url objects from data of a specific format.  There are three included Source implementations:
 
   1.  StaticSetSource - This source is configured with a static list of urls strings
@@ -307,20 +311,23 @@ config =
   cached: {}
 ```
 
-ignoreErrors
-: Set to true if you want to log and ignore errors. If set to false (default) an error in
-the input stream aborts the entire process.
-input object
-: This object can have one of the following keys: 1) fileName 2) url or 3) stream
-options object
-: Defines source specific options (see below)
-siteMap object
-: Defines sitemap information specific to the source, like the priority of urls it produces.
-cached object
-: If present, turns on caching of the data produced by the input so that subsequent runs or
-  even other sources in the configuration can use it. Contains the cacheFile attribute pointing
-  at the path for the cached data and maxAge attribute, a time in milliseconds the cached data
-  should be considered fresh.
+ * ignoreErrors
+   Set to true if you want to log and ignore errors. If set to false (default) an error in
+   the input stream aborts the entire process.
+ * input object
+   This object can have one of the following keys:
+   1. fileName - full path of the file containing the url data
+   2. url - URL that will produce the url data
+   3. stream - An instantiated streaming API Readable object that when read, produces url data
+ * options object
+   Defines source specific options (see below)
+ * siteMap object
+   Defines sitemap information specific to the source, like the priority of urls it produces.
+ * cached object
+   If present, turns on caching of the data produced by the input so that subsequent runs or
+   even other sources in the configuration can use it. Contains the cacheFile attribute pointing
+   at the path for the cached data and maxAge attribute, a time in milliseconds the cached data
+   should be considered fresh.
 
 #### URL Channel ####
 
