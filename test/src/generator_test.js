@@ -1,4 +1,5 @@
 import {expect} from 'chai';
+import request from 'request';
 import {generateSitemaps, config, CsvSource} from '../../src/main';
 import libxmljs from 'libxmljs';
 import zlib from 'zlib';
@@ -9,6 +10,12 @@ import util from 'util';
 describe('sitemap generator', function() {
   this.timeout(5000);
   this.logOutput = null;
+  before((done) => {
+    let xsd = request("http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd", (error, response, body) => {
+      this.xsdSchema = libxmljs.parseXml(body);
+      done();
+    });
+  });
   it('exists', () => {
     expect(generateSitemaps).to_exist;
   });
@@ -40,8 +47,12 @@ describe('sitemap generator', function() {
 
       let gzipOut = concat((xmlData) => {
         expect(parseXml(xmlData)).to.not.throw(Error);
+        let doc = parseXml(xmlData)();
+        expect(doc.validate(this.xsdSchema)).to.be_true;
         let againGzipOut = concat((xmlData) => {
           expect(parseXml(xmlData)).to.not.throw(Error);
+          let doc = parseXml(xmlData)();
+          expect(doc.validate(this.xsdSchema)).to.be_true;
           done();
         });
         fs.createReadStream(sitemap1Files[0].fileName).pipe(zlib.createGunzip()).pipe(againGzipOut);
