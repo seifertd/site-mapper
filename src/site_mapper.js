@@ -111,7 +111,7 @@ export class SiteMapper {
             let waiting = () => {
               let [pushed, drained] = sitemap.totalUrls();
               config.log.trace(`Waiting for sitemap(s) for source ${source.name}, processed ${drained}/${pushed} URLS`);
-              if (pushed != drained) {
+              if (pushed < drained) {
                 setTimeout(waiting, 100);
               } else {
                 if (!closedRemaining) {

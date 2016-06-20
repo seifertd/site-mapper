@@ -23,8 +23,12 @@ export class SitemapFile extends Transform {
     this.gzipper.write(config.sitemapHeader);
   }
   _transform(url, encoding, callback) {
-    this.push(url.toXml());
-    this.urlCount += 1;
+    if (typeof url === "string") {
+      this.push(url);
+    } else {
+      this.push(url.toXml());
+      this.urlCount += 1;
+    }
     callback();
   }
   toIndexXml() {
@@ -34,7 +38,7 @@ export class SitemapFile extends Transform {
     return this.gzipDone && this.fileDone;
   }
   close() {
-    this.gzipper.write("</urlset>");
+    this.write("</urlset>");
     this.end();
   }
 }
