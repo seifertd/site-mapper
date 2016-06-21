@@ -12,7 +12,8 @@ export class CachedInput extends Readable {
       let stats = fs.statSync(this.cacheFile);
       let lastMod = new Date(stats.mtime);
       let now = new Date();
-      if (lastMod.getTime() + options.maxAge > now.getTime()) {
+      let maxAge = options.maxAge || 86400000;
+      if (lastMod.getTime() + maxAge > now.getTime()) {
         config.log.debug(`Using cached data at ${this.cacheFile}`);
         this.inputCreate = () => {
           return fs.createReadStream(this.cacheFile);
