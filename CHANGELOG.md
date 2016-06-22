@@ -1,3 +1,6 @@
+See: https://github.com/seifertd/site-mapper/releases for latest release notes
+
+
 1.2.1 / 2015-08-26
 * Allow configuration to ignore source errors
 
