@@ -4,5 +4,6 @@ import {StaticSetSource} from './static_set_source';
 import {PaginatedHttpInput} from './paginated_http_input';
 import {CachedInput} from './paginated_http_input';
 import {MultipleHttpInput} from './multiple_http_input';
+import {XmlSource} from './xml_source';
 
-export {CsvSource, StaticSetSource, JsonSource, PaginatedHttpInput, CachedInput, MultipleHttpInput};
+export {CsvSource, StaticSetSource, JsonSource, PaginatedHttpInput, CachedInput, MultipleHttpInput, XmlSource};
