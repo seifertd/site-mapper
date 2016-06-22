@@ -5,7 +5,13 @@ import {extend} from 'underscore';
 const libxml = require('libxmljs');
 
 const DEFAULT_OPTIONS = {
-  urlTag: 'url'
+  urlTag: 'url',
+  urlAttributes: {
+    'lastmod': 'lastModified',
+    'changefreq': 'changeFrequency',
+    'priority': 'priority',
+    'loc': 'url'
+  }
 };
 export class XmlSource extends SitemapTransformer {
   constructor(options) {
@@ -41,19 +47,9 @@ export class XmlSource extends SitemapTransformer {
       }
     }).on("characters", (text) => {
       if (this.url && this.url.nextAttribute) {
-        switch(this.url.nextAttribute) {
-          case 'lastmod':
-            this.url.lastModified = `${this.url.lastModified || ''}${text}`.trim();
-            break;
-          case 'changefreq':
-            this.url.changeFrequency = `${this.url.changeFrequency || ''}${text}`.trim();
-            break;
-          case 'priority':
-            this.url.priority = `${this.url.priority || ''}${text}`.trim();
-            break;
-          case 'loc':
-            this.url.url = `${this.url.url || ''}${text}`.trim();
-            break;
+        let urlAttr = myConfig.urlAttributes[this.url.nextAttribute];
+        if (urlAttr) {
+          this.url[urlAttr] = `${this.url[urlAttr] || ''}${text}`.trim();
         }
       }
     }).on("error", (err) => {
