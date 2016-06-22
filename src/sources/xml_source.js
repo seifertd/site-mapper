@@ -33,7 +33,7 @@ export class XmlSource extends SitemapTransformer {
             this.url.lastModified = Date.parse(this.url.lastModified);
           }
           if (this.url.priority) {
-            config.log.trace(`PARSING ${this.url.priority} as a float`);
+            //config.log.trace(`PARSING ${this.url.priority} as a float`);
             this.url.priority = parseFloat(this.url.priority);
           }
           let url = this._decorateUrl(new Url(this.url));
