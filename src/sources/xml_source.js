@@ -2,7 +2,7 @@ import {SitemapTransformer} from './sitemap_transformer';
 import {Url} from '../url';
 import {config} from '../config';
 import {extend} from 'underscore';
-const libxml = require('libxmljs');
+const sax = require('sax');
 
 const DEFAULT_OPTIONS = {
   urlTag: 'url',
@@ -11,21 +11,24 @@ const DEFAULT_OPTIONS = {
     'changefreq': 'changeFrequency',
     'priority': 'priority',
     'loc': 'url'
+  },
+  parserOptions: {
+    trim: true
   }
 };
 export class XmlSource extends SitemapTransformer {
   constructor(options) {
     super(options);
     let myConfig = extend({}, DEFAULT_OPTIONS, options.options);
-    this.parser = new libxml.SaxPushParser();
-    this.parser.on("startElementNS", (element) => {
-      if (element === myConfig.urlTag) {
+    this.parser = sax.createStream(true, myConfig.parserOptions);
+    this.parser.on("opentag", (element) => {
+      if (element.name === myConfig.urlTag) {
         this.url = {};
       } else if (this.url) {
-        this.url.nextAttribute = element;
+        this.url.nextAttribute = element.name;
       }
-    }).on("endElementNS", (element) => {
-      if (element === myConfig.urlTag) {
+    }).on("closetag", (tagName) => {
+      if (tagName === myConfig.urlTag) {
         try {
           delete this.url.nextAttribute;
           if (this.url.lastModified) {
@@ -45,11 +48,11 @@ export class XmlSource extends SitemapTransformer {
         }
         this.url = null;
       }
-    }).on("characters", (text) => {
+    }).on("text", (text) => {
       if (this.url && this.url.nextAttribute) {
         let urlAttr = myConfig.urlAttributes[this.url.nextAttribute];
         if (urlAttr) {
-          this.url[urlAttr] = `${this.url[urlAttr] || ''}${text}`.trim();
+          this.url[urlAttr] = `${this.url[urlAttr] || ''}${text}`;
         }
       }
     }).on("error", (err) => {
@@ -57,7 +60,7 @@ export class XmlSource extends SitemapTransformer {
     });
   }
   _transform(chunk, encoding, callback) {
-    this.parser.push(chunk);
+    this.parser.write(chunk);
     callback();
   }
   open() {
