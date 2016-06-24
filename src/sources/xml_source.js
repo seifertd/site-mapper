@@ -57,7 +57,7 @@ export class XmlSource extends SitemapTransformer {
       }
     }).on("error", (err) => {
       this.emit("error", err);
-    });
+    }).on("end", () => this.emit("end"));
   }
   _transform(chunk, encoding, callback) {
     this.parser.write(chunk);

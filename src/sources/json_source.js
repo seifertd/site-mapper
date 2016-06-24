@@ -51,7 +51,6 @@ export class JsonSource extends SitemapTransformer {
       }
       try {
         let url = this._decorateUrl(new Url(object));
-        let util = require('util');
         if (url) {
           this.push(url);
         } else {
