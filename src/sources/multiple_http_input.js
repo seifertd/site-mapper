@@ -1,12 +1,14 @@
 import {Readable} from 'stream';
 import {config} from '../config';
 import request from 'request';
+import {extend} from 'underscore';
 
 export class MultipleHttpInput extends Readable {
   constructor(options) {
     super();
     this.urls = options.urls.slice();
     this.error = false;
+    this.httpOptions = options.httpOptions;
     if (!this.urls || this.urls.length == 0) {
       throw new Error("No urls specified for MultipleHttpInput: ", this.urls);
     }
@@ -18,7 +20,7 @@ export class MultipleHttpInput extends Readable {
     }
     let url = this.urls.shift();
     if (url) {
-      this.input = request.get(url).on('response', (response) => {
+      this.input = request.get(extend({}, config.httpOptions, this.httpOptions, {uri: url})).on('response', (response) => {
         config.log.trace(`URL: ${url} => ${response.statusCode} LENGTH: ${response.headers['content-length']}`);
         if (response.statusCode >= 300) {
           this.error = true;

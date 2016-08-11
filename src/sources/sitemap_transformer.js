@@ -1,6 +1,7 @@
 const Transform = require('stream').Transform;
 const fs = require('fs');
 const request = require('request');
+const {extend} = require('underscore');
 import {config} from '../config';
 import {CachedInput} from './cached_input';
 
@@ -56,10 +57,10 @@ export class SitemapTransformer extends Transform {
     let input = () => {
       if (inputOptions.fileName) {
         config.log.debug(`Source ${this.name} opening file ${inputOptions.fileName}`)
-        return fs.createReadStream(inputOptions.fileName, {encoding: "utf8"});
+        return fs.createReadStream(inputOptions.fileName, extend({encoding: "utf8"}, config.fileOptions, inputOptions.fileOptions));
       } else if (inputOptions.url) {
         config.log.debug(`Source ${this.name} opening url ${inputOptions.url}`)
-        return request.get({uri: inputOptions.url});
+        return request.get(extend({}, config.httpOptions, inputOptions.httpOptions, {uri: inputOptions.url}));
       } else if (inputOptions.stream) {
         return inputOptions.stream;
       } else {

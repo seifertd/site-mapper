@@ -1,6 +1,6 @@
 import {Readable} from 'stream';
-import {extend} from 'underscore';
 import {config} from '../config';
+import {extend} from 'underscore';
 import iconv from 'iconv-lite';
 import request from 'request';
 import URL from 'url';
@@ -18,6 +18,7 @@ export class PaginatedHttpInput extends Readable {
     super();
     this.baseUrl = URL.parse(options.url, true);
     this.pagination = extend({}, DEFAULT_PAGINATION, options.pagination);
+    this.httpOptions = options.httpOptions;
     this.format = options.format;
     this.stop = options.stop;
 
@@ -40,7 +41,7 @@ export class PaginatedHttpInput extends Readable {
     // WTF?
     delete newUrl.search;
     let url = URL.format(newUrl);
-    request.get({uri: url, encoding: 'binary'}).on('response', (response) => {
+    request.get(extend({encoding: 'binary'}, config.httpOptions, this.httpOptions, {uri: url})).on('response', (response) => {
       config.log.trace(`URL: ${url} => ${response.statusCode} LENGTH: ${response.headers['content-length']}`);
       try {
         s.totalAvailable = parseFloat(response.headers['content-length']);
