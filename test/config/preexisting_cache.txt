@@ -1,0 +1,5 @@
+/url1_cached,
+/url2_cached,/image2_cached
+/url3_cached,/image3_cached
+/url4_cached,/image4_cached
+/url5_cached,
