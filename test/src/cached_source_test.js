@@ -8,6 +8,10 @@ describe('cached source', function() {
     config.addAppSpecific();
     this.urlFormatter = config.defaultUrlFormatter({urlBase: "http://test.com"});
     this.cacheFile = `${process.cwd()}/tmp/cachefile.txt`;
+    let tmpDir = `${process.cwd()}/tmp`;
+    if (!fs.existsSync(tmpDir)) {
+      fs.mkdirSync(tmpDir);
+    }
   });
   after( () => {
     fs.unlinkSync(this.cacheFile);
