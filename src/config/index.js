@@ -31,5 +31,8 @@ var addAppSpecific = function() {
 // Set up logger
 config.log = bunyan.createLogger(config.logConfig);
 config.addAppSpecific = addAppSpecific;
+config.addOverrides = (overrides) => {
+  extend(config, overrides);
+};
 
 export { config };

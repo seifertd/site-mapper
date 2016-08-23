@@ -177,7 +177,7 @@ configuration (more about this later).
 In the returned object, the type is either one of the built in source
 type classes (see below) or a site specific class derived from the SitemapTransformer base class.
 
-A minimal config might be:
+A minimal config might be ./config/staging.coffee:
 
 ```coffee
 {StaticSetSource, JsonSource} = require 'site-mapper'
@@ -264,6 +264,29 @@ setup :
 generate :
 	@rm -rf tmp
 	@NODE_ENV=$(NODE_ENV) $(SITEMAPPER)
+```
+
+### Overriding the configuration from the command line ###
+
+For one-off generation of sitemap(s) for a single source, the site-mapper command line tool will
+accept the following command line arguments:
+
+```
+Usage: node_modules/.bin/site-mapper [-s SITEMAP] [-i INCLUDES] [-e EXCLUDES]
+
+Options:
+  -s, --sitemap  name of the sitemap in the sitemaps section of the
+                 configuration file
+  -i, --include  only include specified source(s)                        [array]
+  -e, --exclude  add specified source(s) to excludes                     [array]
+  -h, --help     Show help                                             [boolean]
+```
+
+So, using the configuration in the previous section, to generate the sitemap(s) for just
+the `staticUrls` source:
+
+```bash
+NODE_ENV=staging ./node_modules/.bin/site-mapper -s main -i staticUrls  | ./node_modules/site-mapper/node_modules/.bin/bunyan
 ```
 
 ## Sitemap Generation ##
@@ -442,7 +465,8 @@ site-mapper ships with the following custom input stream classes:
 MultipleHttpInput({urls: ['url1', 'url2', ...]});
 ```
 
-Each url is called and it's data parsed by the underlying Source. Really only works with CSV data right now.
+Each url is called and it's data parsed by the underlying Source. Works with either CSV
+or JSON data.
 
 ```coffeescript
 PaginatedHttpInput({url, pagination, format, stop})

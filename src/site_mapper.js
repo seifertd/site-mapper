@@ -43,9 +43,9 @@ export class SiteMapper {
       return new sourceClass(sourceOptions);
     };
     config.log.info("Initializing sources");
+    let includes = this.sitemapConfig.sources && this.sitemapConfig.sources.includes;
+    let excludes = this.sitemapConfig.sources && this.sitemapConfig.sources.excludes;
     each(config.sources, (sourceDefinition, sourceName) => {
-      let includes = this.sitemapConfig.sources && this.sitemapConfig.sources.includes;
-      let excludes = this.sitemapConfig.sources && this.sitemapConfig.sources.excludes;
       if (includes && includes.length > 0) {
         // If there is an explicit includes list, only include sources in this list
         if (includes.indexOf(sourceName) >= 0) {
@@ -62,7 +62,7 @@ export class SiteMapper {
       }
     });
     if (sources.length <= 0) {
-      throw new Error("No sitemap source definitions");
+      throw new Error(`No sitemap source definitions matched includes: ${includes}`);
     }
     config.log.info(`Initialized ${sources.length} sources`);
     return sources;

@@ -60,7 +60,19 @@ describe('sitemap generator', function() {
       fs.createReadStream(sitemap2Files[0].fileName).pipe(zlib.createGunzip()).pipe(gzipOut);
     });
   });
+  it('will override the config if asked to', (done) => {
+    generateSitemaps({sitemaps: { "test.com": { sources: { includes: ['source1'] } } } }, (err, results) => {
+      expect(err).to.be_null
+      expect(results.length).to.equal(1);
+      expect(results[0].sitemaps.length).to.equal(1);
 
+      let sitemap1Files = results[0].sitemaps[0].allFiles();
+      expect(sitemap1Files.length).to.equal(1);
+      expect(sitemap1Files[0].fileName).to.match(/channel10/);
+      expect(sitemap1Files[0].urlCount).to.equal(4);
+      done();
+    });
+  });
   describe('with a source with error', () => {
     before( () => {
       this.sourceOptions = {

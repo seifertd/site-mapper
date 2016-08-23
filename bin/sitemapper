@@ -12,12 +12,62 @@ try {
   console.log("  -> run 'npm install babel-register'");
 }
 
+var argv = require('yargs').
+  usage('Usage: $0 [-s SITEMAP] [-i INCLUDES] [-e EXCLUDES]').
+  describe('s', 'name of the sitemap in the sitemaps section of the configuration file').
+  describe('i', 'only include specified source(s)').
+  describe('e', 'add specified source(s) to excludes').
+  help('h').
+  array('i').
+  array('e').
+  alias('h', 'help').
+  alias('s', 'sitemap').
+  alias('i', 'include').
+  alias('e', 'exclude').
+  implies('i', 's').
+  implies('e', 's').
+  argv;
+
 // set environment
 process.env.NODE_ENV = process.env.NODE_ENV || 'production';
 var generateSitemaps = require('../lib/main').generateSitemaps;
-var util = require('util');
+var overrides = {};
 
-generateSitemaps(function(err) {
+var setupSitemapOverride = function() {
+  if (!overrides.sitemaps) {
+    overrides.sitemaps = {};
+  }
+  if (!overrides.sitemaps[argv.s]) {
+    overrides.sitemaps[argv.s] = { };
+  }
+  if (!overrides.sitemaps[argv.s].sources) {
+    overrides.sitemaps[argv.s].sources = { };
+  }
+};
+var setIncludes = function() {
+  if (!argv.i) {
+    return;
+  }
+  setupSitemapOverride();
+  overrides.sitemaps[argv.s].sources.includes = argv.i;
+};
+var addExcludes = function() {
+  if (!argv.e) {
+    return;
+  }
+  setupSitemapOverride();
+  if (!overrides.sitemaps[argv.s].excludes) {
+    overrides.sitemaps[argv.s].excludes = [];
+  }
+  overrides.sitemaps[argv.s].sources.excludes.apply('push', argv.e);
+};
+
+setIncludes();
+addExcludes();
+
+console.log("OVERRIDES: ", overrides);
+
+generateSitemaps(overrides, function(err) {
   if (err) {
     process.exit(1);
   } else {

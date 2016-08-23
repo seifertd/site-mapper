@@ -3,10 +3,17 @@ import {SiteMapper} from './site_mapper';
 import async from 'async';
 import {each} from 'underscore';
 
-var generateSitemaps = function(done) {
+var generateSitemaps = function(configOverrides, done) {
+  // Optional argument handling
+  if (typeof(configOverrides) === "function") {
+    done = configOverrides;
+    configOverrides = {};
+  }
   let tasks = [];
   let siteMappers = [];
   config.addAppSpecific();
+
+  config.addOverrides(configOverrides);
 
   if (!config.sitemaps || config.sitemaps.length <= 0) {
     config.log.error("No sitemaps in config");

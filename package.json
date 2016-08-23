@@ -38,11 +38,12 @@
     "coffee-script": "^1.10.0",
     "csv": "^0.4.0",
     "iconv-lite": "^0.4.13",
-    "sax": "^1.2.1",
     "request": "^2.72.0",
+    "sax": "^1.2.1",
     "stream-array": "^1.1.2",
     "stream-json": "^0.4.2",
-    "underscore": "^1.8.3"
+    "underscore": "^1.8.3",
+    "yargs": "^5.0.0"
   },
   "devDependencies": {
     "babel-cli": "^6.8.0",
