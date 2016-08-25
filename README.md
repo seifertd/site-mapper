@@ -253,6 +253,7 @@ usage :
 	@echo ''
 
 SITEMAPPER=./node_modules/.bin/site-mapper
+BUNYAN=./node_modules/site-mapper/node_modules/.bin/bunyan
 NPM_ARGS=
 NODE_ENV=staging
 
@@ -263,7 +264,7 @@ setup :
 
 generate :
 	@rm -rf tmp
-	@NODE_ENV=$(NODE_ENV) $(SITEMAPPER)
+	@NODE_ENV=$(NODE_ENV) $(SITEMAPPER) | $(BUNYAN)
 ```
 
 ### Overriding the configuration from the command line ###
@@ -336,18 +337,27 @@ config =
 ```
 
  * ignoreErrors
+
    Set to true if you want to log and ignore errors. If set to false (default) an error in
    the input stream aborts the entire process.
+
  * input object
+
    This object can have one of the following keys:
    1. fileName - full path of the file containing the url data
    2. url - URL that will produce the url data
    3. stream - An instantiated streaming API Readable object that when read, produces url data
+
  * options object
+
    Defines source specific options (see below)
+
  * siteMap object
+
    Defines sitemap information specific to the source, like the priority of urls it produces.
+
  * cached object
+
    If present, turns on caching of the data produced by the input so that subsequent runs or
    even other sources in the configuration can use it. Contains the cacheFile attribute pointing
    at the path for the cached data and maxAge attribute, a time in milliseconds the cached data
