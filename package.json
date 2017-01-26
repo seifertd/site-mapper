@@ -57,9 +57,10 @@
     "commitizen": "^2.8.1",
     "concat-stream": "^1.5.1",
     "cz-conventional-changelog": "^1.1.6",
+    "libxmljs": "^0.18.0",
     "mocha": "^2.4.5",
     "semantic-release": "^4.3.5",
-    "libxmljs": "^0.18.0"
+    "validate-commit-message": "^3.0.1"
   },
   "config": {
     "commitizen": {
