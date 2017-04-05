@@ -113,6 +113,8 @@ export class Sitemap extends Writable {
       throw new Error(`url ${util.inspect(url)} has no channel: ${util.inspect(channel)}`);
     }
     let [file, previousFile] = this.currentSitemapFile(channel);
+    file.write(url);
+    this.urlCount[channel] += 1;
     // If there is a previousFile, wait for it to drain before writing url
     if (previousFile) {
       let waiting = function() {
@@ -126,8 +128,6 @@ export class Sitemap extends Writable {
       };
       setTimeout(waiting, 100);
     } else {
-      file.write(url);
-      this.urlCount[channel] += 1;
       callback();
     }
   }
