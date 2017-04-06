@@ -12,7 +12,8 @@ module.exports = {
   sitemaps: {
     "test.com": {
       sitemapIndex: 'testSitemap.xml',
-      urlBase: 'http://test.com'
+      urlBase: 'http://test.com',
+      maxUrlsPerFile: 2
     }
   },
   sources: {

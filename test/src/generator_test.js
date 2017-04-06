@@ -27,13 +27,15 @@ describe('sitemap generator', function() {
       expect(results[0].sitemaps.length).to.equal(2);
 
       let sitemap1Files = results[0].sitemaps[0].allFiles();
-      expect(sitemap1Files.length).to.equal(1);
+      expect(sitemap1Files.length).to.equal(2);
       expect(sitemap1Files[0].fileName).to.match(/channel10/);
-      expect(sitemap1Files[0].urlCount).to.equal(4);
+      expect(sitemap1Files[0].urlCount).to.equal(2);
+      expect(sitemap1Files[1].urlCount).to.equal(2);
       let sitemap2Files = results[0].sitemaps[1].allFiles();
-      expect(sitemap2Files.length).to.equal(1);
+      expect(sitemap2Files.length).to.equal(2);
       expect(sitemap2Files[0].fileName).to.match(/channel20/);
-      expect(sitemap2Files[0].urlCount).to.equal(4);
+      expect(sitemap2Files[0].urlCount).to.equal(2);
+      expect(sitemap1Files[1].urlCount).to.equal(2);
 
       // Check that sitemaps are well formed xml
       let parseXml = (xmlData) => {
