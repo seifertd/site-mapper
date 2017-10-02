@@ -1,6 +1,6 @@
 import {config} from './config';
 import fs from 'fs';
-import {each, extend} from 'underscore';
+import {each, extend} from 'lodash';
 import {Sitemap} from './sitemap';
 import async from 'async';
 
