@@ -30,7 +30,7 @@
     "sitemap"
   ],
   "engines": {
-    "node": ">=4"
+    "node": ">=6"
   },
   "dependencies": {
     "async": "^1.5.2",
