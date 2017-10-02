@@ -2,7 +2,6 @@ import {Transform} from 'stream';
 import {SitemapTransformer} from './sitemap_transformer';
 import {Url} from '../url';
 import {config} from '../config';
-import {extend} from 'underscore';
 import Parser from 'stream-json/Parser';
 import Streamer from 'stream-json/Streamer';
 import {JsonFilter} from './json_filter';

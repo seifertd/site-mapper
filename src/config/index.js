@@ -1,6 +1,6 @@
 var fs = require('fs');
 var path = require('path');
-var {extend} = require('underscore');
+var {extend} = require('lodash');
 var bunyan = require('bunyan');
 
 var env = process.env.NODE_ENV || 'development';

@@ -2,7 +2,7 @@ import {config} from './config';
 import {SiteMapper} from './site_mapper';
 import * as sources from './sources';
 import {generateSitemaps} from './generateSitemaps';
-import {extend} from 'underscore';
+import {extend} from 'lodash';
 import util from 'util';
 
 var toExport = {config, SiteMapper, generateSitemaps};

@@ -1,7 +1,7 @@
 const Transform = require('stream').Transform;
 const fs = require('fs');
 const request = require('request');
-const {extend} = require('underscore');
+const {extend} = require('lodash');
 import {config} from '../config';
 import {CachedInput} from './cached_input';
 

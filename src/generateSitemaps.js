@@ -1,7 +1,7 @@
 import {config} from './config';
 import {SiteMapper} from './site_mapper';
 import async from 'async';
-import {each} from 'underscore';
+import {each} from 'lodash';
 
 var generateSitemaps = function(configOverrides, done) {
   // Optional argument handling

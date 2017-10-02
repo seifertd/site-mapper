@@ -1,6 +1,6 @@
 import {SitemapTransformer} from './sitemap_transformer';
 import {Url} from '../url';
-import {extend} from 'underscore';
+import {extend} from 'lodash';
 const csv = require('csv');
 
 const DEFAULT_OPTIONS = {

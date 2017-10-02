@@ -1,7 +1,7 @@
 import {SitemapTransformer} from './sitemap_transformer';
 import {Url} from '../url';
 import {config} from '../config';
-import {extend} from 'underscore';
+import {extend} from 'lodash';
 const sax = require('sax');
 
 const DEFAULT_OPTIONS = {

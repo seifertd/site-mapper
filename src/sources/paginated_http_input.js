@@ -1,6 +1,6 @@
 import {Readable} from 'stream';
 import {config} from '../config';
-import {extend} from 'underscore';
+import {extend} from 'lodash';
 import iconv from 'iconv-lite';
 import request from 'request';
 import URL from 'url';

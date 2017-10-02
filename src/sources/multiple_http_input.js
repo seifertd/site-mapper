@@ -1,7 +1,7 @@
 import {Readable} from 'stream';
 import {config} from '../config';
 import request from 'request';
-import {extend} from 'underscore';
+import {extend} from 'lodash';
 
 export class MultipleHttpInput extends Readable {
   constructor(options) {

@@ -2,7 +2,7 @@ import {config} from './config';
 import {CsvSource} from './sources/csv_source';
 import {Sitemap} from './sitemap';
 import {SiteMapper} from './site_mapper';
-import {extend} from 'underscore';
+import {extend} from 'lodash';
 
 var sourceOptions = {
   options: {
