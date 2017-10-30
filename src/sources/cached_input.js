@@ -34,9 +34,9 @@ export class CachedInput extends Readable {
     if (!this.input) {
       this.input = this.inputCreate().on('data', (data) => {
         let pause = !this.push(data);
-        if (pause) {
+        /*if (pause) {
           config.log.trace("WE MUST PAUSE AND ARE IGNORING IT, MAYBE WE WILL HANG");
-        }
+        }*/
       }).on('end', () => {
         this.push(null);
       }).on('error', (err) => {
