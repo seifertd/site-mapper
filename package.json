@@ -17,7 +17,7 @@
     "prepublish": "npm start",
     "start": "babel src --out-dir lib",
     "test": "CONFIG_DIR=$PWD/test NODE_ENV=test mocha",
-    "semantic-release": "semantic-release pre && npm publish && semantic-release post"
+    "semantic-release": "./node_modules/.bin/semantic-release"
   },
   "main": "./lib/main.js",
   "bin": "./bin/sitemapper",
@@ -37,7 +37,7 @@
     "async": "^2.5.0",
     "bunyan": "^1.8.12",
     "coffee-script": "^1.12.7",
-    "csv": "^1.1.1",
+    "csv": "^1.2.1",
     "iconv-lite": "^0.4.19",
     "lodash": "^4.17.4",
     "request": "^2.83.0",
@@ -53,15 +53,15 @@
     "babel-core": "^6.26.0",
     "babel-plugin-transform-es2015-modules-umd": "^6.24.1",
     "babel-polyfill": "^6.26.0",
-    "babel-preset-env": "^1.6.0",
+    "babel-preset-env": "^1.6.1",
     "babel-register": "^6.26.0",
     "chai": "^3.5.0",
     "commitizen": "^2.9.6",
     "concat-stream": "^1.6.0",
     "libxmljs": "^0.18.7",
     "mocha": "^2.5.3",
-    "semantic-release": "^8.0.0",
-    "semantic-release-cli": "^3.2.0"
+    "semantic-release": "^9.0.0",
+    "semantic-release-cli": "^3.2.4"
   },
   "config": {
     "commitizen": {
