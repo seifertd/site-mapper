@@ -17,7 +17,7 @@
     "prepublish": "npm start",
     "start": "babel src --out-dir lib",
     "test": "CONFIG_DIR=$PWD/test NODE_ENV=test mocha",
-    "semantic-release": "./node_modules/.bin/semantic-release"
+    "semantic-release": "semantic-release pre && npm publish && semantic-release post"
   },
   "main": "./lib/main.js",
   "bin": "./bin/sitemapper",
