@@ -85,6 +85,9 @@ describe('sitemap generator', function() {
           siteMap: {}
         }
       };
+      if (!config.sources) {
+        config.sources = {}
+      }
       config.sources.errorSource = (sitemapConfig) => {
         return this.sourceOptions;
       };
