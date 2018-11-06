@@ -71,19 +71,29 @@ export class SiteMapper {
     async.series([(done) => { return this.generateFiles(done); }, (done) => { return this.generateIndex(done); }], done);
   }
   generateIndex(done) {
-    this.indexFileName = `${this.sitemapConfig.targetDirectory}/${this.sitemapConfig.sitemapIndex}`;
-    config.log.info(`Creating sitemap index: ${this.indexFileName}`);
-    let index = fs.createWriteStream(this.indexFileName);
-    index.on("finish", done);
-    index.on("error", done);
-    index.write(config.sitemapIndexHeader);
+    this.indexFiles = {};
+    this.indexFiles.default = {
+      name: `${this.sitemapConfig.targetDirectory}/${this.sitemapConfig.sitemapIndex}`,
+    };
+    config.log.info(`Creating sitemap index files, default index = ${this.indexFiles.default.name}`);
+    const openIndex = fileName => {
+      const indexStream = fs.createWriteStream(fileName);
+      indexStream.write(config.sitemapIndexHeader);
+      return indexStream;
+    }
+    const closeIndex = fileStream => {
+      fileStream.write("</sitemapindex>");
+      fileStream.end();
+    }
+    this.indexFiles.default.file = openIndex(this.indexFiles.default.name);
+    this.indexFiles.default.file.on("finish", done);
+    this.indexFiles.default.file.on("error", done);
     this.sitemaps.forEach((sitemap) =>{
       sitemap.allFiles().forEach( (file) => {
-         index.write(file.toIndexXml());
+         this.indexFiles.default.file.write(file.toIndexXml());
       });
     });
-    index.write("</sitemapindex>");
-    index.end();
+    closeIndex(this.indexFiles.default.file);
   }
   generateFiles(done) {
     let tasks = this.sources.map((source) => {

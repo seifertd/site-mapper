@@ -7,7 +7,7 @@ import concat from 'concat-stream';
 import fs from 'fs';
 import util from 'util';
 
-describe('sitemap generator', function() {
+describe('multiple index sitemap generator', function() {
   this.timeout(5000);
   this.logOutput = null;
   before((done) => {
@@ -20,8 +20,9 @@ describe('sitemap generator', function() {
     expect(generateSitemaps).to_exist;
   });
 
-  it('works with the test configuration', (done) => {
-    generateSitemaps((err, results) => {
+  it('creates per source index files if so configured', (done) => {
+    const overrideConfig = require("../config/multiple_index_files.js");
+    generateSitemaps(overrideConfig, (err, results) => {
       expect(err).to.be_null
       expect(results.length).to.equal(1);
       expect(results[0].sitemaps.length).to.equal(2);
@@ -60,60 +61,6 @@ describe('sitemap generator', function() {
         fs.createReadStream(sitemap1Files[0].fileName).pipe(zlib.createGunzip()).pipe(againGzipOut);
       });
       fs.createReadStream(sitemap2Files[0].fileName).pipe(zlib.createGunzip()).pipe(gzipOut);
-    });
-  });
-  it('will override the config if asked to', (done) => {
-    generateSitemaps({sitemaps: { "test.com": { sources: { includes: ['source1'] } } } }, (err, results) => {
-      expect(err).to.be_null
-      expect(results.length).to.equal(1);
-      expect(results[0].sitemaps.length).to.equal(1);
-
-      let sitemap1Files = results[0].sitemaps[0].allFiles();
-      expect(sitemap1Files.length).to.equal(1);
-      expect(sitemap1Files[0].fileName).to.match(/channel10/);
-      expect(sitemap1Files[0].urlCount).to.equal(4);
-      done();
-    });
-  });
-  describe('with a source with error', () => {
-    before( () => {
-      this.sourceOptions = {
-        type: CsvSource,
-        options: {
-          input: { noValidKeys: ""},
-          options: {},
-          siteMap: {}
-        }
-      };
-      if (!config.sources) {
-        config.sources = {}
-      }
-      config.sources.errorSource = (sitemapConfig) => {
-        return this.sourceOptions;
-      };
-    });
-    describe('with default config', () => {
-      it('fails', (done) => {
-        generateSitemaps((err, results) => {
-          expect(err).to.not.be_null;
-          done();
-        });
-      });
-    });
-
-    describe('with config to ignore errors', () => {
-      before(() => {
-        this.sourceOptions.options.ignoreErrors = true;
-      });
-      it('works', (done) => {
-        generateSitemaps((err, results) => {
-          expect(err).to.be_null;
-          expect(results.length).to.equal(1);
-          // The errored source does not result in a sitemap, hence only 2 sitemaps
-          expect(results[0].sitemaps.length).to.equal(2);
-          done();
-        });
-      });
     });
   });
 });
