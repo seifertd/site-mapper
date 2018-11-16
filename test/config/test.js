@@ -1,6 +1,6 @@
-var StaticSetSource = require('../../src/main').StaticSetSource;
+var StaticSetSource = require('../../lib/main').StaticSetSource;
 var concat = require('concat-stream');
-var config = require('../../src/config').config;
+var config = require('../../lib/config').config;
 
 module.exports = {
   foo: 'bar',

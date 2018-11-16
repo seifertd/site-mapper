@@ -1,6 +1,6 @@
 const {expect} = require('chai');
-import {config} from '../../src/config';
-import {CsvSource} from '../../src/sources/csv_source';
+import {config} from '../../lib/config';
+import {CsvSource} from '../../lib/sources/csv_source';
 
 describe('csv file source', function() {
   before( () => {

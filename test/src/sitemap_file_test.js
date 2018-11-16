@@ -1,6 +1,6 @@
 import {expect} from 'chai';
-import {SitemapFile} from '../../src/sitemapFile';
-import {Url} from '../../src/url';
+import {SitemapFile} from '../../lib/sitemapFile';
+import {Url} from '../../lib/url';
 const concat = require('concat-stream');
 const util = require('util');
 

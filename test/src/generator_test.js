@@ -1,6 +1,6 @@
 import {expect} from 'chai';
 import request from 'request';
-import {generateSitemaps, config, CsvSource} from '../../src/main';
+import {generateSitemaps, config, CsvSource} from '../../lib/main';
 import libxmljs from 'libxmljs';
 import zlib from 'zlib';
 import concat from 'concat-stream';

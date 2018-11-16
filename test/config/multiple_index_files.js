@@ -1,4 +1,4 @@
-var StaticSetSource = require('../../src/main').StaticSetSource;
+var StaticSetSource = require('../../lib/main').StaticSetSource;
 
 module.exports = {
   sources: {

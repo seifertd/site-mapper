@@ -1,6 +1,6 @@
 import {expect} from 'chai';
 import request from 'request';
-import {generateSitemaps, config, CsvSource} from '../../src/main';
+import {generateSitemaps, config, CsvSource} from '../../lib/main';
 import libxmljs from 'libxmljs';
 import zlib from 'zlib';
 import concat from 'concat-stream';
@@ -45,8 +45,11 @@ describe('multiple index sitemap generator', function() {
         }
       };
 
-      expect(results[0].indexFiles.default.name).to.match(/testSitemap\.xml/);
-      expect(parseXml(fs.readFileSync(results[0].indexFiles.default.name))).to.not.throw(Error);
+      expect(Object.keys(results[0].indexFiles).length).to.equal(2);
+      Object.keys(results[0].indexFiles).forEach( indexName => {
+        expect(results[0].indexFiles[indexName].name).to.match(/channel[12]Index\.xml/);
+        expect(parseXml(fs.readFileSync(results[0].indexFiles[indexName].name))).to.not.throw(Error);
+      });
 
       let gzipOut = concat((xmlData) => {
         expect(parseXml(xmlData)).to.not.throw(Error);
