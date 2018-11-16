@@ -14,7 +14,9 @@
   "scripts": {
     "clean": "rm -rf node_modules",
     "commit": "git-cz",
-    "test": "CONFIG_DIR=$PWD/test NODE_ENV=test mocha"
+    "test": "CONFIG_DIR=$PWD/test NODE_ENV=test mocha",
+    "semantic-release": "semantic-release",
+    "travis-deploy-once": "travis-deploy-once"
   },
   "main": "./lib/main.js",
   "bin": "./bin/sitemapper",
@@ -30,14 +32,14 @@
     "node": ">=8"
   },
   "dependencies": {
-    "@commitlint/prompt": "^3.2.0",
+    "@commitlint/prompt": "^7.2.1",
     "async": "^2.5.0",
     "bunyan": "^1.8.12",
     "coffee-script": "^1.12.7",
     "csv": "^1.2.1",
     "iconv-lite": "^0.4.19",
-    "lodash": "^4.17.4",
-    "request": "^2.83.0",
+    "lodash": "^4.17.11",
+    "request": "^2.88.0",
     "sax": "^1.2.4",
     "stream-array": "^1.1.2",
     "stream-json": "^0.4.2",
@@ -47,16 +49,18 @@
     "@commitlint/cli": "^3.2.0",
     "@commitlint/config-angular": "^3.1.1",
     "chai": "^3.5.0",
-    "commitizen": "^2.9.6",
+    "commitizen": "^3.0.4",
     "concat-stream": "^1.6.0",
-    "libxmljs": "^0.18.7",
-    "mocha": "^2.5.3",
-    "semantic-release": "^9.1.1",
-    "semantic-release-cli": "^3.2.4"
+    "libxmljs": "^0.19.5",
+    "mocha": "^5.2.0",
+    "semantic-release": "^15.12.0",
+    "semantic-release-cli": "^4.0.9",
+    "travis-deploy-once": "^5.0.9"
   },
   "config": {
     "commitizen": {
       "path": "@commitlint/prompt"
     }
-  }
+  },
+  "version": "0.0.0-development"
 }
