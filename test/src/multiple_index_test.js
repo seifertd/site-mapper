@@ -1,11 +1,11 @@
-import {expect} from 'chai';
-import request from 'request';
-import {generateSitemaps, config, CsvSource} from '../../lib/main';
-import libxmljs from 'libxmljs';
-import zlib from 'zlib';
-import concat from 'concat-stream';
-import fs from 'fs';
-import util from 'util';
+const {expect} = require('chai');
+const request = require('request');
+const {generateSitemaps, config, CsvSource} = require('../../lib/main');
+const libxmljs = require('libxmljs');
+const zlib = require('zlib');
+const concat = require('concat-stream');
+const fs = require('fs');
+const util = require('util');
 
 describe('multiple index sitemap generator', function() {
   this.timeout(5000);

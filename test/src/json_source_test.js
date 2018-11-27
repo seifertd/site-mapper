@@ -1,6 +1,6 @@
 const {expect} = require('chai');
-import {config} from '../../lib/config';
-import {JsonSource} from '../../lib/sources/json_source';
+const {config} = require('../../lib/config');
+const JsonSource = require('../../lib/sources/json_source');
 
 describe('json file source', function() {
   this.timeout(15000);

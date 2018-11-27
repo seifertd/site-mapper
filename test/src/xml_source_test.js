@@ -1,6 +1,6 @@
 const {expect} = require('chai');
-import {config} from '../../lib/config';
-import {XmlSource} from '../../lib/sources';
+const {config} = require('../../lib/config');
+const {XmlSource} = require('../../lib/sources');
 
 describe('xml source', function() {
   before(() => {

@@ -1,5 +1,5 @@
 var {expect} = require('chai');
-import {config} from '../../lib/config';
+const {config} = require('../../lib/config');
 
 describe('config', function() {
   it('knows the environment', () => {
