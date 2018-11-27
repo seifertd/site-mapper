@@ -32,6 +32,10 @@
     "node": ">=8"
   },
   "dependencies": {
+    "@babel/core": "^7.0.0",
+    "@babel/register": "^7.0.0",
+    "@babel/plugin-syntax-dynamic-import": "^7.0.0",
+    "@babel/preset-env": "^7.0.0",
     "@commitlint/prompt": "^7.2.1",
     "async": "^2.5.0",
     "bunyan": "^1.8.12",
