@@ -1,6 +1,6 @@
 {
   "name": "site-mapper",
-  "description": "sitemap.xml generation in node.js",
+  "description": "sitemap.xml generation in node.js.",
   "license": "MIT",
   "repository": {
     "type": "git",
