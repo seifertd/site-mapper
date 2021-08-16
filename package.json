@@ -32,39 +32,39 @@
     "node": ">=8"
   },
   "dependencies": {
-    "@babel/core": "^7.0.0",
-    "@babel/register": "^7.0.0",
-    "@babel/plugin-syntax-dynamic-import": "^7.0.0",
-    "@babel/preset-env": "^7.0.0",
-    "@commitlint/prompt": "^7.2.1",
-    "async": "^2.5.0",
-    "bunyan": "^1.8.12",
+    "@babel/core": "^7.15.0",
+    "@babel/plugin-syntax-dynamic-import": "^7.8.3",
+    "@babel/preset-env": "^7.15.0",
+    "@babel/register": "^7.15.3",
+    "@commitlint/prompt": "^7.6.1",
+    "async": "^2.6.3",
+    "bunyan": "^1.8.15",
     "coffee-script": "^1.12.7",
     "csv": "^1.2.1",
-    "iconv-lite": "^0.4.19",
-    "lodash": "^4.17.11",
-    "request": "^2.88.0",
+    "iconv-lite": "^0.4.24",
+    "lodash": "^4.17.21",
+    "request": "^2.88.2",
     "sax": "^1.2.4",
     "stream-array": "^1.1.2",
     "stream-json": "^0.4.2",
-    "yargs": "^7.1.0"
+    "yargs": "^7.1.2"
   },
   "devDependencies": {
     "@commitlint/cli": "^3.2.0",
     "@commitlint/config-angular": "^3.1.1",
     "chai": "^3.5.0",
-    "commitizen": "^3.0.4",
-    "concat-stream": "^1.6.0",
+    "commitizen": "^3.1.2",
+    "concat-stream": "^1.6.2",
     "libxmljs": "^0.19.5",
     "mocha": "^5.2.0",
-    "semantic-release": "^15.12.0",
-    "semantic-release-cli": "^4.0.9",
-    "travis-deploy-once": "^5.0.9"
+    "semantic-release": "^15.14.0",
+    "semantic-release-cli": "^4.1.2",
+    "travis-deploy-once": "^5.0.11"
   },
   "config": {
     "commitizen": {
       "path": "@commitlint/prompt"
     }
   },
-  "version": "0.0.0-development"
+  "version": "3.1.0"
 }
