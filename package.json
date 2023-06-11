@@ -37,7 +37,7 @@
     "@babel/preset-env": "^7.15.0",
     "@babel/register": "^7.15.3",
     "@commitlint/prompt": "^13.1.0",
-    "async": "^2.6.3",
+    "async": "^3.2.4",
     "bunyan": "^1.8.15",
     "coffee-script": "^1.12.7",
     "csv": "^5.5.0",
