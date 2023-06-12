@@ -46,7 +46,7 @@
     "request": "^2.88.2",
     "sax": "^1.2.4",
     "stream-array": "^1.1.2",
-    "stream-json": "^0.4.2",
+    "stream-json": "^1.8.0",
     "yargs": "^17.1.1"
   },
   "devDependencies": {
