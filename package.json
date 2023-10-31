@@ -50,7 +50,7 @@
     "yargs": "^17.1.1"
   },
   "devDependencies": {
-    "@commitlint/cli": "^17.6.5",
+    "@commitlint/cli": "^18.2.0",
     "@commitlint/config-angular": "^18.1.0",
     "chai": "^4.3.7",
     "commitizen": "^4.2.4",
