@@ -57,7 +57,7 @@
     "concat-stream": "^2.0.0",
     "libxmljs": "^1.0.9",
     "mocha": "^10.2.0",
-    "semantic-release": "^22.0.0",
+    "semantic-release": "^23.0.0",
     "semantic-release-cli": "^5.4.4",
     "travis-deploy-once": "^5.0.11"
   },
