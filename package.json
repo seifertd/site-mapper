@@ -52,7 +52,7 @@
   "devDependencies": {
     "@commitlint/cli": "^19.0.3",
     "@commitlint/config-angular": "^19.0.3",
-    "chai": "^5.0.0",
+    "chai": "^6.2.0",
     "commitizen": "^4.2.4",
     "concat-stream": "^2.0.0",
     "libxmljs": "^1.0.9",
