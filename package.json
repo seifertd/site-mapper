@@ -4,7 +4,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/seifertd/site-mapper"
+    "url": "git+https://github.com/seifertd/site-mapper.git"
   },
   "author": {
     "name": "Douglas A. Seifert",
@@ -18,7 +18,9 @@
     "semantic-release": "semantic-release"
   },
   "main": "./lib/main.js",
-  "bin": "./bin/sitemapper",
+  "bin": {
+    "site-mapper": "bin/sitemapper"
+  },
   "readmeFilename": "README.md",
   "keywords": [
     "es6",
