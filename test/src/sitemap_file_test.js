@@ -6,12 +6,12 @@ const util = require('util');
 
 describe('sitemap', function() {
   it('class exists', () => {
-    expect(SitemapFile).to_exist;
+    expect(SitemapFile).to.exist;
   });
   describe('instances', () => {
     let setupSitemap = (done, regexes) => {
       this.outStream = concat((sitemapOutput) => {
-        expect(sitemapOutput).to_exist;
+        expect(sitemapOutput).to.exist;
         regexes.forEach( (regex) => {
           expect(sitemapOutput).to.match(regex);
         });
@@ -23,7 +23,7 @@ describe('sitemap', function() {
 
     it("can be created", () => {
       setupSitemap();
-      expect(this.sitemap).to_exist;
+      expect(this.sitemap).to.exist;
     });
 
     it("consumes urls and emits xml", (done) => {

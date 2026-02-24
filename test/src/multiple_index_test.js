@@ -1,7 +1,6 @@
 const {expect} = require('chai');
-const request = require('request');
 const {generateSitemaps, config, CsvSource} = require('../../lib/main');
-const libxmljs = require('libxmljs');
+const libxmljs = require('libxmljs2');
 const zlib = require('zlib');
 const concat = require('concat-stream');
 const fs = require('fs');
@@ -10,20 +9,19 @@ const util = require('util');
 describe('multiple index sitemap generator', function() {
   this.timeout(5000);
   this.logOutput = null;
-  before((done) => {
-    let xsd = request("http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd", (error, response, body) => {
-      this.xsdSchema = libxmljs.parseXml(body);
-      done();
-    });
+  before(async () => {
+    const res = await fetch("http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd");
+    const body = await res.text();
+    this.xsdSchema = libxmljs.parseXml(body);
   });
   it('exists', () => {
-    expect(generateSitemaps).to_exist;
+    expect(generateSitemaps).to.exist;
   });
 
   it('creates per source index files if so configured', (done) => {
     const overrideConfig = require("../config/multiple_index_files.js");
     generateSitemaps(overrideConfig, (err, results) => {
-      expect(err).to.be_null
+      expect(err).to.be.null;
       expect(results.length).to.equal(1);
       expect(results[0].sitemaps.length).to.equal(2);
 
@@ -54,11 +52,11 @@ describe('multiple index sitemap generator', function() {
       let gzipOut = concat((xmlData) => {
         expect(parseXml(xmlData)).to.not.throw(Error);
         let doc = parseXml(xmlData)();
-        expect(doc.validate(this.xsdSchema)).to.be_true;
+        expect(doc.validate(this.xsdSchema)).to.be.true;
         let againGzipOut = concat((xmlData) => {
           expect(parseXml(xmlData)).to.not.throw(Error);
           let doc = parseXml(xmlData)();
-          expect(doc.validate(this.xsdSchema)).to.be_true;
+          expect(doc.validate(this.xsdSchema)).to.be.true;
           done();
         });
         fs.createReadStream(sitemap1Files[0].fileName).pipe(zlib.createGunzip()).pipe(againGzipOut);

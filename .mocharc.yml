@@ -1,0 +1,3 @@
+check-leaks: true
+recursive: true
+spec: test/src/**/*.js

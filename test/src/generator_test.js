@@ -1,7 +1,6 @@
 const {expect} = require('chai');
-const request = require('request');
 const {generateSitemaps, config, CsvSource} = require('../../lib/main');
-const libxmljs = require('libxmljs');
+const libxmljs = require('libxmljs2');
 const zlib = require('zlib');
 const concat = require('concat-stream');
 const fs = require('fs');
@@ -10,19 +9,18 @@ const util = require('util');
 describe('sitemap generator', function() {
   this.timeout(5000);
   this.logOutput = null;
-  before((done) => {
-    let xsd = request("http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd", (error, response, body) => {
-      this.xsdSchema = libxmljs.parseXml(body);
-      done();
-    });
+  before(async () => {
+    const res = await fetch("http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd");
+    const body = await res.text();
+    this.xsdSchema = libxmljs.parseXml(body);
   });
   it('exists', () => {
-    expect(generateSitemaps).to_exist;
+    expect(generateSitemaps).to.exist;
   });
 
   it('works with the test configuration', (done) => {
     generateSitemaps((err, results) => {
-      expect(err).to.be_null
+      expect(err).to.be.null;
       expect(results.length).to.equal(1);
       expect(results[0].sitemaps.length).to.equal(2);
 
@@ -50,11 +48,11 @@ describe('sitemap generator', function() {
       let gzipOut = concat((xmlData) => {
         expect(parseXml(xmlData)).to.not.throw(Error);
         let doc = parseXml(xmlData)();
-        expect(doc.validate(this.xsdSchema)).to.be_true;
+        expect(doc.validate(this.xsdSchema)).to.be.true;
         let againGzipOut = concat((xmlData) => {
           expect(parseXml(xmlData)).to.not.throw(Error);
           let doc = parseXml(xmlData)();
-          expect(doc.validate(this.xsdSchema)).to.be_true;
+          expect(doc.validate(this.xsdSchema)).to.be.true;
           done();
         });
         fs.createReadStream(sitemap1Files[0].fileName).pipe(zlib.createGunzip()).pipe(againGzipOut);
@@ -64,7 +62,7 @@ describe('sitemap generator', function() {
   });
   it('will override the config if asked to', (done) => {
     generateSitemaps({sitemaps: { "test.com": { sources: { includes: ['source1'] } } } }, (err, results) => {
-      expect(err).to.be_null
+      expect(err).to.be.null;
       expect(results.length).to.equal(1);
       expect(results[0].sitemaps.length).to.equal(1);
 
@@ -95,7 +93,7 @@ describe('sitemap generator', function() {
     describe('with default config', () => {
       it('fails', (done) => {
         generateSitemaps((err, results) => {
-          expect(err).to.not.be_null;
+          expect(err).to.not.be.null;
           done();
         });
       });
@@ -107,7 +105,7 @@ describe('sitemap generator', function() {
       });
       it('works', (done) => {
         generateSitemaps((err, results) => {
-          expect(err).to.be_null;
+          expect(err).to.be.null;
           expect(results.length).to.equal(1);
           // The errored source does not result in a sitemap, hence only 2 sitemaps
           expect(results[0].sitemaps.length).to.equal(2);

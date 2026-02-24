@@ -1,21 +1,4 @@
 #!/usr/bin/env node
-try {
-  require('coffee-script/register')
-} catch (err) {
-  console.log("WARN: coffee script config files will not be supported without coffee-script/register");
-  console.log("  -> run 'npm install coffee-script'");
-}
-try {
-  require('@babel/register');
-  require("@babel/core").transform("code", {
-    plugins: ["@babel/plugin-syntax-dynamic-import"]
-  });
-} catch (err) {
-  console.log("WARN: site-mapper requires @babel/register, @babel/core and @babel/plugin-syntax-dynamic-import");
-  console.log("  -> run 'npm install @babel/core'");
-  console.log("  -> run 'npm install @babel/register'");
-  console.log("  -> run 'npm install @babel/plugin-syntax-dynamic-import'");
-}
 
 var argv = require('yargs').
   usage('Usage: $0 [-s SITEMAP] [-i INCLUDES] [-e EXCLUDES]').
