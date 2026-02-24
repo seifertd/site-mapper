@@ -11,7 +11,7 @@ describe('xml source', function() {
     let urls = [];
     let source = new XmlSource({siteMap: {changefreq: 'foo', priority: 1, channel: 'xml',
       urlFormatter: this.urlFormatter}, input: {fileName: `${process.cwd()}/test/config/sitemap.xml`}, 
-      options: {urlTag: 'url'}}).on('end', (args) => {
+      options: {urlTag: 'url'}}).on('end', () => {
         expect(urls.length).to.equal(15);
         done();
       }).on('error', (err) => {
@@ -23,8 +23,7 @@ describe('xml source', function() {
     source.open();
   });
   it('generates an error when xml is bad', (done) => {
-    let urls = [];
-    let source = new XmlSource({siteMap: {changefreq: 'foo', priority: 1, channel: 'xml',
+    const source = new XmlSource({siteMap: {changefreq: 'foo', priority: 1, channel: 'xml',
       urlFormatter: this.urlFormatter}, input: {fileName: `${process.cwd()}/test/config/sitemap_bad.xml`}, 
       options: {urlTag: 'url'}}).on('error', (err) => {
         expect(err).to.not.be.null;

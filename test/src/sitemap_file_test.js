@@ -2,8 +2,6 @@ const {expect} = require('chai');
 const SitemapFile = require('../../lib/sitemapFile');
 const Url = require('../../lib/url');
 const concat = require('concat-stream');
-const util = require('util');
-
 describe('sitemap', function() {
   it('class exists', () => {
     expect(SitemapFile).to.exist;

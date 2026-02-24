@@ -4,8 +4,6 @@ const libxmljs = require('libxmljs2');
 const zlib = require('zlib');
 const concat = require('concat-stream');
 const fs = require('fs');
-const util = require('util');
-
 describe('sitemap generator', function() {
   this.timeout(5000);
   this.logOutput = null;
@@ -86,13 +84,13 @@ describe('sitemap generator', function() {
       if (!config.sources) {
         config.sources = {}
       }
-      config.sources.errorSource = (sitemapConfig) => {
+      config.sources.errorSource = (_sitemapConfig) => {
         return this.sourceOptions;
       };
     });
     describe('with default config', () => {
       it('fails', (done) => {
-        generateSitemaps((err, results) => {
+        generateSitemaps((err, _results) => {
           expect(err).to.not.be.null;
           done();
         });

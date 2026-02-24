@@ -20,7 +20,7 @@ describe('cached source', function() {
     let urls = [];
     let source = new CsvSource({siteMap: {changefreq: 'foo', priority: 1, channel: 'csv',
       urlFormatter: this.urlFormatter}, input: {cached: {cacheFile: this.cacheFile, maxAge: 86000000}, fileName: `${process.cwd()}/test/config/test.csv`}}).
-      on('end', (args) => {
+      on('end', () => {
         expect(urls.length).to.equal(5);
         expect(urls[0].url).to.equal('http://test.com/url1');
         expect(urls[1].url).to.equal('http://test.com/url2');
@@ -46,7 +46,7 @@ describe('cached source', function() {
       let urls = [];
       let source = new CsvSource({siteMap: {changefreq: 'foo', priority: 1, channel: 'csv',
         urlFormatter: this.urlFormatter}, input: {cached: {cacheFile: this.cacheFile, maxAge: 86000000}, fileName: `${process.cwd()}/test/config/test.csv`}}).
-        on('end', (args) => {
+        on('end', () => {
           expect(urls.length).to.equal(5);
           expect(urls[0].url).to.equal('http://test.com/url1_cached');
           expect(urls[1].url).to.equal('http://test.com/url2_cached');
@@ -74,7 +74,7 @@ describe('cached source', function() {
       let urls = [];
       let source = new CsvSource({siteMap: {changefreq: 'foo', priority: 1, channel: 'csv',
         urlFormatter: this.urlFormatter}, input: {cached: {cacheFile: this.cacheFile, maxAge: 86000000}, fileName: `${process.cwd()}/test/config/test.csv`}}).
-        on('end', (args) => {
+        on('end', () => {
           expect(urls.length).to.equal(5);
           expect(urls[0].url).to.equal('http://test.com/url1');
           expect(urls[1].url).to.equal('http://test.com/url2');
@@ -104,7 +104,7 @@ describe('cached source', function() {
       let urls = [];
       let source = new CsvSource({siteMap: {changefreq: 'foo', priority: 1, channel: 'csv',
         urlFormatter: this.urlFormatter}, input: {cached: {cacheFile: this.cacheFile, maxAge: 86000000}, fileName: `${process.cwd()}/test/config/test.csv`}}).
-        on('end', (args) => {
+        on('end', () => {
           expect(urls.length).to.equal(5);
           expect(urls[0].url).to.equal('http://test.com/url1');
           expect(urls[1].url).to.equal('http://test.com/url2');

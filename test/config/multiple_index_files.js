@@ -2,7 +2,7 @@ var StaticSetSource = require('../../lib/main').StaticSetSource;
 
 module.exports = {
   sources: {
-    source1: (sitemapConfig) => {
+    source1: (_sitemapConfig) => {
       return {
         type: StaticSetSource,
         options: {
@@ -23,7 +23,7 @@ module.exports = {
         }
       };
     },
-    source2: (sitemapConfig) => {
+    source2: (_sitemapConfig) => {
       return {
         type: StaticSetSource,
         options: {

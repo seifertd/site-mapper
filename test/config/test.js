@@ -1,13 +1,11 @@
 var StaticSetSource = require('../../lib/main').StaticSetSource;
 var concat = require('concat-stream');
-var config = require('../../lib/config').config;
-
 module.exports = {
   foo: 'bar',
   logConfig: {
     name: 'sitemapper',
     level: 'debug',
-    stream: concat((output) => { })
+    stream: concat((_output) => { })
   },
   sitemaps: {
     "test.com": {
@@ -17,7 +15,7 @@ module.exports = {
     }
   },
   sources: {
-    source1: (sitemapConfig) => {
+    source1: (_sitemapConfig) => {
       return {
         type: StaticSetSource,
         options: {
@@ -37,7 +35,7 @@ module.exports = {
         }
       };
     },
-    source2: (sitemapConfig) => {
+    source2: (_sitemapConfig) => {
       return {
         type: StaticSetSource,
         options: {

@@ -1,11 +1,9 @@
 const {expect} = require('chai');
-const {generateSitemaps, config, CsvSource} = require('../../lib/main');
+const {generateSitemaps} = require('../../lib/main');
 const libxmljs = require('libxmljs2');
 const zlib = require('zlib');
 const concat = require('concat-stream');
 const fs = require('fs');
-const util = require('util');
-
 describe('multiple index sitemap generator', function() {
   this.timeout(5000);
   this.logOutput = null;

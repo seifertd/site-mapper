@@ -11,7 +11,7 @@ describe('csv file source', function() {
     let urls = [];
     let source = new CsvSource({siteMap: {changefreq: 'foo', priority: 1, channel: 'csv',
       urlFormatter: this.urlFormatter}, input: {fileName: `${process.cwd()}/test/config/test.csv`}}).
-      on('end', (args) => {
+      on('end', () => {
         expect(urls.length).to.equal(5);
         expect(urls[0].url).to.equal('http://test.com/url1');
         expect(urls[1].url).to.equal('http://test.com/url2');
@@ -27,7 +27,7 @@ describe('csv file source', function() {
   });
   it('fails when csv file is bad', (done) => {
     let urls = [];
-    let source = new CsvSource({siteMap: {changefreq: 'foo', priority: 1, channel: 'csv',
+    new CsvSource({siteMap: {changefreq: 'foo', priority: 1, channel: 'csv',
       urlFormatter: this.urlFormatter}, input: {fileName: `${process.cwd()}/test/config/error.csv`}}).
       on('error', (error) => {
         expect(error).to.not.be.null;

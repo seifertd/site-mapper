@@ -13,7 +13,7 @@ describe('json file source', function() {
       options: { filter: /.*/ },
       name: 'test',
       input: {fileName: `${process.cwd()}/test/config/json_input_good.json`}}).
-      on('end', (args) => {
+      on('end', () => {
         expect(urls.length).to.equal(5);
         expect(urls[0].url).to.equal('http://www.mysite.com/url1');
         expect(urls[1].url).to.equal('http://www.mysite.com/url2');
@@ -35,7 +35,7 @@ describe('json file source', function() {
       },
       name: 'test',
       input: {fileName: `${process.cwd()}/test/config/json_deep_array.json`}}).
-      on('end', (args) => {
+      on('end', () => {
         expect(urls.length).to.equal(5);
         expect(urls[0].url).to.equal('http://www.mysite.com/url1');
         expect(urls[1].url).to.equal('http://www.mysite.com/url2');
@@ -50,7 +50,7 @@ describe('json file source', function() {
     source.open();
   });
   it('fails when json file is bad', (done) => {
-    let source = new JsonSource({siteMap: {changefreq: 'foo', priority: 1, channel: 'json'},
+    new JsonSource({siteMap: {changefreq: 'foo', priority: 1, channel: 'json'},
       options: {
         filter: /urls\./
       },
