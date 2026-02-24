@@ -59,7 +59,7 @@ describe('json file source', function() {
     on('end', () => {
       console.log("GOT END EVENT WITHOUT ERROR");
     }).on('error', (error) => {
-      expect(error).to.not.be_null;
+      expect(error).to.not.be.null;
       done();
     }).open();
   });

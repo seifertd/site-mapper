@@ -27,7 +27,7 @@ describe('xml source', function() {
     let source = new XmlSource({siteMap: {changefreq: 'foo', priority: 1, channel: 'xml',
       urlFormatter: this.urlFormatter}, input: {fileName: `${process.cwd()}/test/config/sitemap_bad.xml`}, 
       options: {urlTag: 'url'}}).on('error', (err) => {
-        expect(err).to.not.be_null;
+        expect(err).to.not.be.null;
         done();
     });
     source.open();

@@ -14,9 +14,8 @@
   "scripts": {
     "clean": "rm -rf node_modules test/tmp/*",
     "commit": "git-cz",
-    "test": "rm -rf test/tmp/*; CONFIG_DIR=$PWD/test NODE_ENV=test mocha test/src/*",
-    "semantic-release": "semantic-release",
-    "travis-deploy-once": "travis-deploy-once"
+    "test": "rm -rf test/tmp/*; CONFIG_DIR=$PWD/test NODE_ENV=test mocha",
+    "semantic-release": "semantic-release"
   },
   "main": "./lib/main.js",
   "bin": "./bin/sitemapper",
@@ -29,42 +28,31 @@
     "sitemap"
   ],
   "engines": {
-    "node": ">=8"
+    "node": ">=18"
   },
   "dependencies": {
-    "@babel/core": "^7.15.0",
-    "@babel/plugin-syntax-dynamic-import": "^7.8.3",
-    "@babel/preset-env": "^7.15.0",
-    "@babel/register": "^7.15.3",
-    "@commitlint/prompt": "^19.0.3",
-    "async": "^3.2.4",
-    "bunyan": "^1.8.15",
-    "coffee-script": "^1.12.7",
     "csv": "^6.3.1",
-    "iconv-lite": "^0.6.3",
-    "lodash": "^4.17.21",
-    "request": "^2.88.2",
+    "pino": "^9.0.0",
     "sax": "^1.2.4",
-    "stream-array": "^1.1.2",
     "stream-json": "^1.8.0",
     "yargs": "^17.1.1"
   },
   "devDependencies": {
-    "@commitlint/cli": "^19.0.3",
-    "@commitlint/config-angular": "^19.0.3",
-    "chai": "^5.0.0",
+    "@commitlint/cli": "^18.4.1",
+    "@commitlint/config-angular": "^18.1.0",
+    "@commitlint/prompt": "^18.2.0",
+    "chai": "^4.3.7",
     "commitizen": "^4.2.4",
     "concat-stream": "^2.0.0",
-    "libxmljs": "^1.0.9",
+    "libxmljs2": "^0.37.0",
     "mocha": "^10.2.0",
-    "semantic-release": "^24.0.0",
-    "semantic-release-cli": "^5.4.4",
-    "travis-deploy-once": "^5.0.11"
+    "semantic-release": "^22.0.0",
+    "semantic-release-cli": "^5.4.4"
   },
   "config": {
     "commitizen": {
       "path": "@commitlint/prompt"
     }
   },
-  "version": "3.1.2"
+  "version": "4.0.0"
 }

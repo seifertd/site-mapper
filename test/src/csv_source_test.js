@@ -30,7 +30,7 @@ describe('csv file source', function() {
     let source = new CsvSource({siteMap: {changefreq: 'foo', priority: 1, channel: 'csv',
       urlFormatter: this.urlFormatter}, input: {fileName: `${process.cwd()}/test/config/error.csv`}}).
       on('error', (error) => {
-        expect(error).to.not.be_null;
+        expect(error).to.not.be.null;
         done();
       }).on('data', (url) => {
         urls.push(url);

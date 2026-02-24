@@ -7,7 +7,7 @@ describe('config', function() {
   });
 
   it('can read config in the module', () => {
-    expect(config.testing).to.be_true;
+    expect(config.testing).to.be.true;
   });
 
   it('can read the default configuration', () => {
