@@ -45,7 +45,7 @@
     "@commitlint/config-angular": "^18.1.0",
     "@commitlint/prompt": "^18.2.0",
     "@eslint/js": "^10.0.1",
-    "chai": "^4.3.7",
+    "chai": "^6.2.2",
     "commitizen": "^4.2.4",
     "concat-stream": "^2.0.0",
     "eslint": "^10.0.2",
