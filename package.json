@@ -38,7 +38,7 @@
     "pino": "^9.0.0",
     "sax": "^1.2.4",
     "stream-json": "^1.8.0",
-    "yargs": "^17.1.1"
+    "yargs": "^18.0.0"
   },
   "devDependencies": {
     "@commitlint/cli": "^18.4.1",
