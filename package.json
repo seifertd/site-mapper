@@ -43,16 +43,15 @@
   "devDependencies": {
     "@commitlint/cli": "^18.4.1",
     "@commitlint/config-angular": "^18.1.0",
-    "@commitlint/prompt": "^18.2.0",
+    "@commitlint/prompt": "^20.0.0",
     "@eslint/js": "^10.0.1",
-    "chai": "^4.3.7",
+    "chai": "^6.0.0",
     "commitizen": "^4.2.4",
     "concat-stream": "^2.0.0",
     "eslint": "^10.0.2",
     "libxmljs2": "^0.37.0",
-    "mocha": "^10.2.0",
-    "semantic-release": "^22.0.0",
-    "semantic-release-cli": "^5.4.4"
+    "mocha": "^11.0.0",
+    "semantic-release": "^25.0.0"
   },
   "config": {
     "commitizen": {
