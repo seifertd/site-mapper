@@ -1,0 +1,25 @@
+{
+  "branches": ["master"],
+  "plugins": [
+    ["@semantic-release/commit-analyzer", {
+      "preset": "angular",
+      "parserOpts": {
+        "mergePattern": "^Merge pull request #(\\d+) from (.*)$",
+        "mergeCorrespondence": ["id", "source"]
+      },
+      "releaseRules": [
+        {"type": "chore", "release": false},
+        {"merge": "*/dependabot/*", "release": false}
+      ]
+    }],
+    ["@semantic-release/release-notes-generator", {
+      "preset": "angular",
+      "parserOpts": {
+        "mergePattern": "^Merge pull request #(\\d+) from (.*)$",
+        "mergeCorrespondence": ["id", "source"]
+      }
+    }],
+    "@semantic-release/npm",
+    "@semantic-release/github"
+  ]
+}
