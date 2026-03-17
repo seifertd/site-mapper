@@ -300,6 +300,39 @@ Gzipping cannot be disabled.
 It is up to you how you expose the generated sitemaps to Google and other search
 engines — there are no default publishing mechanisms in site-mapper.
 
+## Releases ##
+
+Releases are fully automated via [semantic-release](https://semantic-release.gitbook.io/) and
+triggered by pushes to `master` that pass CI. No manual versioning or tagging is required.
+
+### How it works
+
+The CI workflow runs tests on Node 22.x and 24.x. If tests pass and the push is to `master`,
+semantic-release analyses the commit messages since the last release and:
+
+1. Determines the next version number (patch/minor/major) from commit types
+2. Publishes the new version to npm
+3. Creates a GitHub release with generated release notes
+
+### Commit message conventions
+
+Releases follow the [Angular commit message convention](https://github.com/angular/angular/blob/main/CONTRIBUTING.md#commit):
+
+| Commit type | Release triggered |
+|---|---|
+| `fix: ...` | Patch (e.g. `1.0.0` → `1.0.1`) |
+| `feat: ...` | Minor (e.g. `1.0.0` → `1.1.0`) |
+| `feat!: ...` or `BREAKING CHANGE:` in body | Major (e.g. `1.0.0` → `2.0.0`) |
+| `chore: ...`, `docs: ...`, `refactor: ...` | No release |
+| Dependabot merge commits | No release |
+
+### Required secrets
+
+The GitHub repository must have these secrets configured:
+
+- **`NPM_TOKEN`** — npm automation token with publish access
+- **`GITHUB_TOKEN`** — provided automatically by GitHub Actions
+
 ## Tests ##
 
 ```bash
