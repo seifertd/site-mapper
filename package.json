@@ -16,7 +16,8 @@
     "commit": "git-cz",
     "lint": "eslint lib/ bin/sitemapper test/",
     "test": "rm -rf test/tmp/*; CONFIG_DIR=$PWD/test NODE_ENV=test mocha",
-    "semantic-release": "semantic-release"
+    "semantic-release": "semantic-release",
+    "prepare": "husky"
   },
   "main": "./lib/main.js",
   "bin": {
@@ -49,6 +50,7 @@
     "commitizen": "^4.2.4",
     "concat-stream": "^2.0.0",
     "eslint": "^10.0.3",
+    "husky": "^9.1.7",
     "libxmljs2": "^0.37.0",
     "mocha": "^11.0.0",
     "semantic-release": "^25.0.0"

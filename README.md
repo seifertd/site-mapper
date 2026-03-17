@@ -326,6 +326,13 @@ Releases follow the [Angular commit message convention](https://github.com/angul
 | `chore: ...`, `docs: ...`, `refactor: ...` | No release |
 | Dependabot merge commits | No release |
 
+A `commit-msg` git hook (installed via husky on `npm install`) enforces this format and
+will reject non-conforming messages. Use the interactive commit helper to avoid rejections:
+
+```bash
+npm run commit
+```
+
 ### Required secrets
 
 The GitHub repository must have these secrets configured:
