@@ -38,7 +38,7 @@
     "csv": "^6.3.1",
     "pino": "^10.3.1",
     "sax": "^1.2.4",
-    "stream-json": "^1.8.0",
+    "stream-json": "^2.0.0",
     "yargs": "^18.0.0"
   },
   "devDependencies": {
