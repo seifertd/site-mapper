@@ -5,3 +5,4 @@ tmp
 npm-debug.log
 test/sitemap.xml.gz
 *.swp
+.claude
