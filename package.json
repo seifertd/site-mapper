@@ -46,6 +46,7 @@
     "@commitlint/config-angular": "^21.0.1",
     "@commitlint/prompt": "^21.0.1",
     "@eslint/js": "^10.0.1",
+    "@semantic-release/git": "^10.0.1",
     "chai": "^6.0.0",
     "commitizen": "^4.2.4",
     "concat-stream": "^2.0.0",
