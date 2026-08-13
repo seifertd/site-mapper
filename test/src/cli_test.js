@@ -66,4 +66,25 @@ describe('sitemapper cli', function() {
       done();
     });
   });
+  // The flags name a sitemap in the config file, so they have to keep that
+  // sitemap's own settings -- addOverrides would otherwise replace them.
+  it('keeps the configured sitemap settings', (done) => {
+    runCli(['-s', 'test.com', '-e', 'source2'], (err) => {
+      if (err) { return done(err); }
+      const files = generatedFiles();
+      // sitemapIndex: 'testSitemap.xml', not the default sitemap.xml
+      expect(files).to.contain('testSitemap.xml');
+      // maxUrlsPerFile: 2 over source1's 4 urls
+      expect(files.filter((f) => f.startsWith('channel1')).length).to.equal(2);
+      done();
+    });
+  });
+  it('fails cleanly on an unknown sitemap name', (done) => {
+    runCli(['-s', 'nosuchsitemap', '-i', 'source1'], (err, stdout, stderr) => {
+      expect(err).to.not.be.null;
+      expect(err.code).to.equal(1);
+      expect(stderr).to.contain('nosuchsitemap');
+      done();
+    });
+  });
 });

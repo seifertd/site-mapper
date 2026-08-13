@@ -20,19 +20,28 @@ var argv = require('yargs')(process.argv.slice(2)).
 
 // set environment
 process.env.NODE_ENV = process.env.NODE_ENV || 'production';
-var generateSitemaps = require('../lib/main').generateSitemaps;
+var main = require('../lib/main');
+var generateSitemaps = main.generateSitemaps;
+var config = main.config;
 var overrides = {};
 
+// config.addOverrides replaces top level keys wholesale, which is what a caller
+// building a one-off sitemap wants. These flags mean the opposite -- they name a
+// sitemap in the config file and adjust its sources -- so the override has to be
+// seeded from the configured sitemap, or its own settings are dropped.
 var setupSitemapOverride = function() {
-  if (!overrides.sitemaps) {
-    overrides.sitemaps = {};
+  if (overrides.sitemaps) {
+    return;
   }
-  if (!overrides.sitemaps[argv.s]) {
-    overrides.sitemaps[argv.s] = { };
+  config.addAppSpecific();
+  var configured = config.sitemaps && config.sitemaps[argv.s];
+  if (!configured) {
+    console.error(`No sitemap named '${argv.s}' in the configuration`);
+    process.exit(1);
   }
-  if (!overrides.sitemaps[argv.s].sources) {
-    overrides.sitemaps[argv.s].sources = { };
-  }
+  overrides.sitemaps = {};
+  overrides.sitemaps[argv.s] = Object.assign({}, configured);
+  overrides.sitemaps[argv.s].sources = Object.assign({}, configured.sources);
 };
 var setIncludes = function() {
   if (!argv.i) {
@@ -46,12 +55,10 @@ var addExcludes = function() {
     return;
   }
   setupSitemapOverride();
-  // SiteMapper reads excludes from sitemapConfig.sources.excludes.
-  if (!overrides.sitemaps[argv.s].sources.excludes) {
-    overrides.sitemaps[argv.s].sources.excludes = [];
-  }
-  overrides.sitemaps[argv.s].sources.excludes.push.apply(
-    overrides.sitemaps[argv.s].sources.excludes, argv.e);
+  // SiteMapper reads excludes from sitemapConfig.sources.excludes. Copy any
+  // configured excludes rather than pushing onto the config's own array.
+  var sources = overrides.sitemaps[argv.s].sources;
+  sources.excludes = (sources.excludes || []).concat(argv.e);
 };
 
 setIncludes();
