@@ -1,6 +1,8 @@
 #!/usr/bin/env node
 
-var argv = require('yargs').
+// yargs 18 dropped the CommonJS singleton: require('yargs') is the factory, so
+// it has to be called with the args rather than chained off directly.
+var argv = require('yargs')(process.argv.slice(2)).
   usage('Usage: $0 [-s SITEMAP] [-i INCLUDES] [-e EXCLUDES]').
   describe('s', 'name of the sitemap in the sitemaps section of the configuration file').
   describe('i', 'only include specified source(s)').
@@ -18,19 +20,28 @@ var argv = require('yargs').
 
 // set environment
 process.env.NODE_ENV = process.env.NODE_ENV || 'production';
-var generateSitemaps = require('../lib/main').generateSitemaps;
+var main = require('../lib/main');
+var generateSitemaps = main.generateSitemaps;
+var config = main.config;
 var overrides = {};
 
+// config.addOverrides replaces top level keys wholesale, which is what a caller
+// building a one-off sitemap wants. These flags mean the opposite -- they name a
+// sitemap in the config file and adjust its sources -- so the override has to be
+// seeded from the configured sitemap, or its own settings are dropped.
 var setupSitemapOverride = function() {
-  if (!overrides.sitemaps) {
-    overrides.sitemaps = {};
+  if (overrides.sitemaps) {
+    return;
   }
-  if (!overrides.sitemaps[argv.s]) {
-    overrides.sitemaps[argv.s] = { };
+  config.addAppSpecific();
+  var configured = config.sitemaps && config.sitemaps[argv.s];
+  if (!configured) {
+    console.error(`No sitemap named '${argv.s}' in the configuration`);
+    process.exit(1);
   }
-  if (!overrides.sitemaps[argv.s].sources) {
-    overrides.sitemaps[argv.s].sources = { };
-  }
+  overrides.sitemaps = {};
+  overrides.sitemaps[argv.s] = Object.assign({}, configured);
+  overrides.sitemaps[argv.s].sources = Object.assign({}, configured.sources);
 };
 var setIncludes = function() {
   if (!argv.i) {
@@ -44,16 +55,14 @@ var addExcludes = function() {
     return;
   }
   setupSitemapOverride();
-  if (!overrides.sitemaps[argv.s].excludes) {
-    overrides.sitemaps[argv.s].excludes = [];
-  }
-  overrides.sitemaps[argv.s].sources.excludes.apply('push', argv.e);
+  // SiteMapper reads excludes from sitemapConfig.sources.excludes. Copy any
+  // configured excludes rather than pushing onto the config's own array.
+  var sources = overrides.sitemaps[argv.s].sources;
+  sources.excludes = (sources.excludes || []).concat(argv.e);
 };
 
 setIncludes();
 addExcludes();
-
-console.log("OVERRIDES: ", overrides);
 
 generateSitemaps(overrides, function(err) {
   if (err) {

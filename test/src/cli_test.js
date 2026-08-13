@@ -1,0 +1,90 @@
+const {expect} = require('chai');
+const {execFile} = require('child_process');
+const fs = require('fs');
+const path = require('path');
+
+const cli = path.join(process.cwd(), 'bin', 'sitemapper');
+const targetDir = path.join(process.cwd(), 'tmp', 'sitemaps', 'test');
+
+// The CLI is a separate entry point from the library, so it only gets covered
+// by actually running it. A require-time failure in bin/sitemapper shipped in
+// three releases because nothing here spawned it.
+const runCli = (args, done) => {
+  execFile(process.execPath, [cli].concat(args), {
+    cwd: process.cwd(),
+    env: Object.assign({}, process.env, {
+      CONFIG_DIR: path.join(process.cwd(), 'test'),
+      NODE_ENV: 'test'
+    }),
+    timeout: 30000
+  }, done);
+};
+
+const generatedFiles = () => {
+  return fs.existsSync(targetDir) ? fs.readdirSync(targetDir).sort() : [];
+};
+
+describe('sitemapper cli', function() {
+  this.timeout(30000);
+  beforeEach( () => {
+    fs.rmSync(targetDir, {recursive: true, force: true});
+  });
+  it('loads and prints usage', (done) => {
+    runCli(['--help'], (err, stdout) => {
+      if (err) { return done(err); }
+      expect(stdout).to.contain('Usage:');
+      expect(stdout).to.contain('--sitemap');
+      expect(stdout).to.contain('--include');
+      expect(stdout).to.contain('--exclude');
+      done();
+    });
+  });
+  it('generates sitemaps with no arguments', (done) => {
+    runCli([], (err) => {
+      if (err) { return done(err); }
+      const files = generatedFiles();
+      expect(files).to.contain('channel10.xml.gz');
+      expect(files).to.contain('channel20.xml.gz');
+      done();
+    });
+  });
+  it('restricts sources with --include', (done) => {
+    runCli(['-s', 'test.com', '-i', 'source1'], (err) => {
+      if (err) { return done(err); }
+      const files = generatedFiles();
+      expect(files.some((f) => f.startsWith('channel1'))).to.be.true;
+      expect(files.some((f) => f.startsWith('channel2'))).to.be.false;
+      done();
+    });
+  });
+  it('drops sources with --exclude', (done) => {
+    runCli(['-s', 'test.com', '-e', 'source2'], (err) => {
+      if (err) { return done(err); }
+      const files = generatedFiles();
+      expect(files.some((f) => f.startsWith('channel1'))).to.be.true;
+      expect(files.some((f) => f.startsWith('channel2'))).to.be.false;
+      done();
+    });
+  });
+  // The flags name a sitemap in the config file, so they have to keep that
+  // sitemap's own settings -- addOverrides would otherwise replace them.
+  it('keeps the configured sitemap settings', (done) => {
+    runCli(['-s', 'test.com', '-e', 'source2'], (err) => {
+      if (err) { return done(err); }
+      const files = generatedFiles();
+      // sitemapIndex: 'testSitemap.xml', not the default sitemap.xml
+      expect(files).to.contain('testSitemap.xml');
+      // maxUrlsPerFile: 2 over source1's 4 urls
+      expect(files.filter((f) => f.startsWith('channel1')).length).to.equal(2);
+      done();
+    });
+  });
+  it('fails cleanly on an unknown sitemap name', (done) => {
+    runCli(['-s', 'nosuchsitemap', '-i', 'source1'], (err, stdout, stderr) => {
+      expect(err).to.not.be.null;
+      expect(err.code).to.equal(1);
+      expect(stderr).to.contain('nosuchsitemap');
+      done();
+    });
+  });
+});
