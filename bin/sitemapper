@@ -1,22 +1,66 @@
 #!/usr/bin/env node
 
-// yargs 18 dropped the CommonJS singleton: require('yargs') is the factory, so
-// it has to be called with the args rather than chained off directly.
-var argv = require('yargs')(process.argv.slice(2)).
-  usage('Usage: $0 [-s SITEMAP] [-i INCLUDES] [-e EXCLUDES]').
-  describe('s', 'name of the sitemap in the sitemaps section of the configuration file').
-  describe('i', 'only include specified source(s)').
-  describe('e', 'add specified source(s) to excludes').
-  help('h').
-  array('i').
-  array('e').
-  alias('h', 'help').
-  alias('s', 'sitemap').
-  alias('i', 'include').
-  alias('e', 'exclude').
-  implies('i', 's').
-  implies('e', 's').
-  argv;
+var {parseArgs} = require('util');
+
+var usage = [
+  'Usage: site-mapper [-s SITEMAP] [-i INCLUDES] [-e EXCLUDES]',
+  '',
+  'Options:',
+  '  -s, --sitemap  name of the sitemap in the sitemaps section of the config file',
+  '  -i, --include  only include specified source(s)                        [list]',
+  '  -e, --exclude  add specified source(s) to excludes                     [list]',
+  '  -h, --help     Show help                                            [boolean]',
+  '      --version  Show version number                                  [boolean]',
+  '',
+  'Repeat -i/-e or separate values with commas:',
+  '  -i source1 -i source2      -i source1,source2'
+].join('\n');
+
+var fail = function(message) {
+  console.error(`${message}\n\n${usage}`);
+  process.exit(1);
+};
+
+var values;
+try {
+  values = parseArgs({
+    options: {
+      sitemap: {type: 'string', short: 's'},
+      include: {type: 'string', short: 'i', multiple: true},
+      exclude: {type: 'string', short: 'e', multiple: true},
+      help: {type: 'boolean', short: 'h'},
+      version: {type: 'boolean'}
+    }
+  }).values;
+} catch (err) {
+  fail(err.message);
+}
+
+if (values.help) {
+  console.log(usage);
+  process.exit(0);
+}
+if (values.version) {
+  console.log(require('../package.json').version);
+  process.exit(0);
+}
+
+// parseArgs collects repeated flags but, unlike the yargs array type, will not
+// swallow bare words after one. Splitting on commas keeps multi-value usable.
+var list = function(vals) {
+  if (!vals) {
+    return undefined;
+  }
+  var flat = vals.reduce(function(acc, val) {
+    return acc.concat(val.split(',').map((v) => v.trim()).filter((v) => v.length > 0));
+  }, []);
+  return flat.length > 0 ? flat : undefined;
+};
+
+var argv = {s: values.sitemap, i: list(values.include), e: list(values.exclude)};
+if ((argv.i || argv.e) && !argv.s) {
+  fail('Missing dependent arguments: -i and -e both require -s');
+}
 
 // set environment
 process.env.NODE_ENV = process.env.NODE_ENV || 'production';

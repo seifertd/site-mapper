@@ -4,7 +4,7 @@ Site Map Generation in node.js
 
 ## Requirements ##
 
-Node.js >= 18
+Node.js >= 22
 
 ## Installation ##
 
@@ -15,7 +15,7 @@ of a package.json file:
 ```json
 {
   "dependencies": {
-    "site-mapper": ">= 4.0.0"
+    "site-mapper": ">= 5.0.0"
   }
 }
 ```
@@ -37,10 +37,10 @@ Create a package.json file similar to the following:
   "description": "sitemap generation for mysite.com",
   "version": "1.0.0",
   "dependencies": {
-    "site-mapper": ">= 4.0.0"
+    "site-mapper": ">= 5.0.0"
   },
   "engines": {
-    "node": ">=18"
+    "node": ">=22"
   }
 }
 ```
@@ -197,9 +197,10 @@ Usage: node_modules/.bin/site-mapper [-s SITEMAP] [-i INCLUDES] [-e EXCLUDES]
 
 Options:
   -s, --sitemap  name of the sitemap in the sitemaps section of the config file
-  -i, --include  only include specified source(s)                        [array]
-  -e, --exclude  add specified source(s) to excludes                     [array]
-  -h, --help     Show help                                             [boolean]
+  -i, --include  only include specified source(s)                        [list]
+  -e, --exclude  add specified source(s) to excludes                     [list]
+  -h, --help     Show help                                            [boolean]
+      --version  Show version number                                  [boolean]
 ```
 
 Using the configuration above, to generate the sitemap(s) for just the
@@ -208,6 +209,16 @@ Using the configuration above, to generate the sitemap(s) for just the
 ```bash
 NODE_ENV=staging ./node_modules/.bin/site-mapper -s main -i staticUrls
 ```
+
+`-i` and `-e` take more than one source, either repeated or comma separated:
+
+```bash
+NODE_ENV=staging ./node_modules/.bin/site-mapper -s main -i staticUrls -i products
+NODE_ENV=staging ./node_modules/.bin/site-mapper -s main -i staticUrls,products
+```
+
+The named sitemap keeps the settings it has in the configuration file; `-i`
+replaces its list of included sources and `-e` adds to its excludes.
 
 ## Sitemap Generation ##
 
