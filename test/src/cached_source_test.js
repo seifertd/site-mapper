@@ -21,12 +21,14 @@ describe('cached source', function() {
     let source = new CsvSource({siteMap: {changefreq: 'foo', priority: 1, channel: 'csv',
       urlFormatter: this.urlFormatter}, input: {cached: {cacheFile: this.cacheFile, maxAge: 86000000}, fileName: `${process.cwd()}/test/config/test.csv`}}).
       on('end', () => {
-        expect(urls.length).to.equal(5);
-        expect(urls[0].url).to.equal('http://test.com/url1');
-        expect(urls[1].url).to.equal('http://test.com/url2');
-        expect(urls[1].imageUrl).to.equal('/image2');
-        expect(fs.existsSync(this.cacheFile));
-        done();
+        source.inputStream.cacheWritten.then(() => {
+          expect(urls.length).to.equal(5);
+          expect(urls[0].url).to.equal('http://test.com/url1');
+          expect(urls[1].url).to.equal('http://test.com/url2');
+          expect(urls[1].imageUrl).to.equal('/image2');
+          expect(fs.existsSync(this.cacheFile)).to.be.true;
+          done();
+        }).catch(done);
       }).on('error', (err) => {
         console.log("ERROR: ", err);
         console.log(err.stack);
@@ -51,7 +53,7 @@ describe('cached source', function() {
           expect(urls[0].url).to.equal('http://test.com/url1_cached');
           expect(urls[1].url).to.equal('http://test.com/url2_cached');
           expect(urls[1].imageUrl).to.equal('/image2_cached');
-          expect(fs.existsSync(this.cacheFile));
+          expect(fs.existsSync(this.cacheFile)).to.be.true;
           expect(fs.statSync(this.cacheFile).size).to.be.above(0);
           done();
         }).on('error', (err) => {
@@ -75,13 +77,17 @@ describe('cached source', function() {
       let source = new CsvSource({siteMap: {changefreq: 'foo', priority: 1, channel: 'csv',
         urlFormatter: this.urlFormatter}, input: {cached: {cacheFile: this.cacheFile, maxAge: 86000000}, fileName: `${process.cwd()}/test/config/test.csv`}}).
         on('end', () => {
-          expect(urls.length).to.equal(5);
-          expect(urls[0].url).to.equal('http://test.com/url1');
-          expect(urls[1].url).to.equal('http://test.com/url2');
-          expect(urls[1].imageUrl).to.equal('/image2');
-          expect(fs.existsSync(this.cacheFile));
-          expect(fs.statSync(this.cacheFile).size).to.be.above(0);
-          done();
+          // The cache file is reopened truncated, so its size is only
+          // meaningful once the rewrite has flushed to disk.
+          source.inputStream.cacheWritten.then(() => {
+            expect(urls.length).to.equal(5);
+            expect(urls[0].url).to.equal('http://test.com/url1');
+            expect(urls[1].url).to.equal('http://test.com/url2');
+            expect(urls[1].imageUrl).to.equal('/image2');
+            expect(fs.existsSync(this.cacheFile)).to.be.true;
+            expect(fs.statSync(this.cacheFile).size).to.be.above(0);
+            done();
+          }).catch(done);
         }).on('error', (err) => {
           console.log("ERROR: ", err);
           console.log(err.stack);
@@ -105,13 +111,17 @@ describe('cached source', function() {
       let source = new CsvSource({siteMap: {changefreq: 'foo', priority: 1, channel: 'csv',
         urlFormatter: this.urlFormatter}, input: {cached: {cacheFile: this.cacheFile, maxAge: 86000000}, fileName: `${process.cwd()}/test/config/test.csv`}}).
         on('end', () => {
-          expect(urls.length).to.equal(5);
-          expect(urls[0].url).to.equal('http://test.com/url1');
-          expect(urls[1].url).to.equal('http://test.com/url2');
-          expect(urls[1].imageUrl).to.equal('/image2');
-          expect(fs.existsSync(this.cacheFile));
-          expect(fs.statSync(this.cacheFile).size).to.be.above(0);
-          done();
+          // The cache file is reopened truncated, so its size is only
+          // meaningful once the rewrite has flushed to disk.
+          source.inputStream.cacheWritten.then(() => {
+            expect(urls.length).to.equal(5);
+            expect(urls[0].url).to.equal('http://test.com/url1');
+            expect(urls[1].url).to.equal('http://test.com/url2');
+            expect(urls[1].imageUrl).to.equal('/image2');
+            expect(fs.existsSync(this.cacheFile)).to.be.true;
+            expect(fs.statSync(this.cacheFile).size).to.be.above(0);
+            done();
+          }).catch(done);
         }).on('error', (err) => {
           console.log("ERROR: ", err);
           console.log(err.stack);
