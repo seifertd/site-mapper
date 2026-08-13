@@ -4,6 +4,7 @@ jobs:
   test:
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
         node-version: [22.x, 24.x]
     steps:
@@ -11,6 +12,10 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
+      # Node 22 ships npm 10, Node 24 ships npm 11, and the two resolve optional
+      # peer dependencies differently. Pin npm so every leg agrees with the
+      # lockfile Dependabot writes.
+      - run: npm i -g npm@11
       - run: npm ci
       - run: npm run lint
       - run: npm test
@@ -31,6 +36,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 24.x
+      - run: npm i -g npm@11
       - run: npm ci
       - run: npx semantic-release
         env:
