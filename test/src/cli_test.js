@@ -79,6 +79,47 @@ describe('sitemapper cli', function() {
       done();
     });
   });
+  it('prints the version', (done) => {
+    runCli(['--version'], (err, stdout) => {
+      if (err) { return done(err); }
+      expect(stdout.trim()).to.equal(require('../../package.json').version);
+      done();
+    });
+  });
+  it('accepts comma separated list values', (done) => {
+    runCli(['-s', 'test.com', '-i', 'source1,source2'], (err) => {
+      if (err) { return done(err); }
+      const files = generatedFiles();
+      expect(files.some((f) => f.startsWith('channel1'))).to.be.true;
+      expect(files.some((f) => f.startsWith('channel2'))).to.be.true;
+      done();
+    });
+  });
+  it('accepts repeated list flags', (done) => {
+    runCli(['-s', 'test.com', '-i', 'source1', '-i', 'source2'], (err) => {
+      if (err) { return done(err); }
+      const files = generatedFiles();
+      expect(files.some((f) => f.startsWith('channel1'))).to.be.true;
+      expect(files.some((f) => f.startsWith('channel2'))).to.be.true;
+      done();
+    });
+  });
+  it('requires --sitemap alongside --include', (done) => {
+    runCli(['-i', 'source1'], (err, stdout, stderr) => {
+      expect(err).to.not.be.null;
+      expect(err.code).to.equal(1);
+      expect(stderr).to.contain('require -s');
+      done();
+    });
+  });
+  it('rejects unknown options', (done) => {
+    runCli(['--nosuchflag'], (err, stdout, stderr) => {
+      expect(err).to.not.be.null;
+      expect(err.code).to.equal(1);
+      expect(stderr).to.contain('nosuchflag');
+      done();
+    });
+  });
   it('fails cleanly on an unknown sitemap name', (done) => {
     runCli(['-s', 'nosuchsitemap', '-i', 'source1'], (err, stdout, stderr) => {
       expect(err).to.not.be.null;
