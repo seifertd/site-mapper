@@ -1,6 +1,8 @@
 #!/usr/bin/env node
 
-var argv = require('yargs').
+// yargs 18 dropped the CommonJS singleton: require('yargs') is the factory, so
+// it has to be called with the args rather than chained off directly.
+var argv = require('yargs')(process.argv.slice(2)).
   usage('Usage: $0 [-s SITEMAP] [-i INCLUDES] [-e EXCLUDES]').
   describe('s', 'name of the sitemap in the sitemaps section of the configuration file').
   describe('i', 'only include specified source(s)').
@@ -44,16 +46,16 @@ var addExcludes = function() {
     return;
   }
   setupSitemapOverride();
-  if (!overrides.sitemaps[argv.s].excludes) {
-    overrides.sitemaps[argv.s].excludes = [];
+  // SiteMapper reads excludes from sitemapConfig.sources.excludes.
+  if (!overrides.sitemaps[argv.s].sources.excludes) {
+    overrides.sitemaps[argv.s].sources.excludes = [];
   }
-  overrides.sitemaps[argv.s].sources.excludes.apply('push', argv.e);
+  overrides.sitemaps[argv.s].sources.excludes.push.apply(
+    overrides.sitemaps[argv.s].sources.excludes, argv.e);
 };
 
 setIncludes();
 addExcludes();
-
-console.log("OVERRIDES: ", overrides);
 
 generateSitemaps(overrides, function(err) {
   if (err) {
