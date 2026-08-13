@@ -4,7 +4,7 @@ Site Map Generation in node.js
 
 ## Requirements ##
 
-Node.js >= 18
+Node.js >= 22
 
 ## Installation ##
 
@@ -15,7 +15,7 @@ of a package.json file:
 ```json
 {
   "dependencies": {
-    "site-mapper": ">= 4.0.0"
+    "site-mapper": ">= 5.0.0"
   }
 }
 ```
@@ -37,10 +37,10 @@ Create a package.json file similar to the following:
   "description": "sitemap generation for mysite.com",
   "version": "1.0.0",
   "dependencies": {
-    "site-mapper": ">= 4.0.0"
+    "site-mapper": ">= 5.0.0"
   },
   "engines": {
-    "node": ">=18"
+    "node": ">=22"
   }
 }
 ```
