@@ -1,11 +1,20 @@
-# To get started with Dependabot version updates, you'll need to specify which
-# package ecosystems to update and where the package manifests are located.
-# Please see the documentation for all configuration options:
-# https://docs.github.com/github/administering-a-repository/configuration-options-for-dependency-updates
-
 version: 2
 updates:
-  - package-ecosystem: "npm" # See documentation for possible values
-    directory: "/" # Location of package manifests
-    schedule:
-      interval: "weekly"
+# Dependencies are updated by hand: one `npm update` on a monthly schedule (the
+# dependency-update skill), reviewed for major bumps, then tested before shipping.
+# One-package-per-PR version updates went stale and conflicted with each other,
+# and closing one tells Dependabot to ignore that release.
+#
+# A limit of 0 stops version-update PRs only. Security alerts still arrive, and
+# security-update PRs still open if they are enabled in the repo settings.
+- package-ecosystem: npm
+  directory: "/"
+  schedule:
+    interval: weekly
+  open-pull-requests-limit: 0
+# Package updates never touch workflow files, so Actions stay with Dependabot.
+- package-ecosystem: github-actions
+  directory: "/"
+  schedule:
+    interval: weekly
+  open-pull-requests-limit: 10
